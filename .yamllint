@@ -1,9 +1,0 @@
----
-extends: default
-
-locale: en_US.UTF-8
-
-rules:
-    line-length: disable
-    truthy:
-        check-keys: false
