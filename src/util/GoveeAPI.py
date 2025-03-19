@@ -1,4 +1,5 @@
 import re
+import uuid
 
 import aiohttp
 
@@ -32,12 +33,19 @@ capabilities = {
 async def validate_response(response: aiohttp.ClientResponse):
     if response.status != 200:
         raise RuntimeError(f"Request failed with status code {response.status}")
-    response = await response.json()
-    if response["code"] != 200 or response["message"] != "success":
-        raise RuntimeError(
-            f"Request failed with error code {response['code']} and message {response['message']}"
-        )
-    if "data" not in response:
+    response: dict = await response.json()
+    if response["code"] != 200:
+        if "msg" in response:
+            raise RuntimeError(
+                f"Request failed with error code {response['code']} and message {response['msg']}"
+            )
+        elif "message" in response:
+            raise RuntimeError(
+                f"Request failed with error code {response['code']} and message {response['message']}"
+            )
+        else:
+            raise RuntimeError(f"Request failed with error code {response['code']}")
+    if "data" not in response and "payload" not in response:
         raise RuntimeError("Response does not contain data")
 
 
@@ -105,9 +113,21 @@ class GoveeAPI:
             ) as response:
                 return await response.json()
 
-    async def get_device_state(self):
-        async with self.client.post("/router/api/v1/device/state") as response:
-            return await response.json()
+    async def get_device_state(
+        self, sku: str, device: str, request_id: str = str(uuid.uuid4())
+    ):
+        payload = {
+            "sku": sku,
+            "device": device,
+        }
+        body = {"requestId": request_id, "payload": payload}
+        async with self.client.post(
+            "/router/api/v1/device/state", json=body
+        ) as response:
+            json = await response.json()
+            if json["requestId"] != request_id:
+                raise RuntimeError("Request ID mismatch")
+            return json["payload"]
 
     async def get_dynamic_device(self):
         async with self.client.post("/router/api/v1/device/scenes") as response:
