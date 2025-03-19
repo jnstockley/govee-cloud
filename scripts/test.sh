@@ -3,4 +3,4 @@
 export PYTHONPATH=src/:$PYTHONPATH
 
 # Run Tests
-uv run pytest --cov src --cov-branch --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+uv run pytest --cov src --cov-branch --cov-report=html --junitxml=junit.xml -o junit_family=legacy
