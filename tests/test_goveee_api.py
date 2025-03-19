@@ -3,7 +3,7 @@ from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 from aioresponses import aioresponses
 
-from src.util.GoveeAPI import GoveeAPI
+from src.util.govee_api import GoveeAPI
 
 
 class TestGoveeAPI(IsolatedAsyncioTestCase):
