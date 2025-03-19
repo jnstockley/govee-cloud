@@ -42,7 +42,9 @@ async def validate_response(response: aiohttp.ClientResponse):
 
 
 def validate_data(data: dict) -> bool:
-    uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.I)
+    uuid_pattern = re.compile(
+        r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.I
+    )
     if "requestId" not in data or type(data["requestId"]) is not str:
         raise ValueError("data must contain a requestId")
     if "payload" not in data or type(data["payload"]) is not dict:

@@ -1,0 +1,25 @@
+{
+  "get_devices": {
+    "code": 200,
+    "message": "success",
+    "data": [
+      {
+        "sku": "H6601",
+        "device": "9D:FA:85:EB:D3:00:8B:FF",
+        "capabilities": [
+          {
+            "type": "devices.capabilities.on_off",
+            "instance": "powerSwitch",
+            "parameters": {
+              "dataType": "ENUM",
+              "options": [
+                {"name": "on", "value": 1},
+                {"name": "off", "value": 0}
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
