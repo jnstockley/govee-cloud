@@ -1,4 +1,3 @@
-import re
 import uuid
 
 import aiohttp
@@ -49,34 +48,16 @@ async def validate_response(response: aiohttp.ClientResponse):
         raise RuntimeError("Response does not contain data")
 
 
-def validate_data(data: dict) -> bool:
-    uuid_pattern = re.compile(
-        r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.I
-    )
-    if "requestId" not in data or type(data["requestId"]) is not str:
-        raise ValueError("data must contain a requestId")
-    if "payload" not in data or type(data["payload"]) is not dict:
-        raise ValueError("data must contain a payload")
-    if uuid_pattern.match(data["requestId"]) is None:
-        raise ValueError("requestId must be a valid UUID")
-    if type(data["payload"]) is not dict:
-        raise ValueError("payload must be a dictionary")
-    payload: dict = data["payload"]
-    # TODO See if we can validate the payload further
-    if "sku" not in payload or type(payload["sku"]) is not str:
-        raise ValueError("payload must contain a sku")
-    if "device" not in payload or type(payload["device"]) is not str:
-        raise ValueError("payload must contain a device")
-    if "capability" not in payload:
-        raise ValueError("payload must contain a capability")
-    if type(payload["capability"]) is not dict:
-        raise ValueError("capability must be a dictionary")
-    capability: dict = payload["capability"]
+def validate_capability(capability: dict) -> bool:
     if "type" not in capability or type(capability["type"]) is not str:
         raise ValueError("capability must contain a type")
     if "instance" not in capability or type(capability["instance"]) is not str:
         raise ValueError("capability must contain an instance")
-    if "value" not in capability or type(capability["value"]) is not str:
+    if (
+        "value" not in capability
+        or type(capability["value"]) is not int
+        or type(capability["value"]) is not dict
+    ):
         raise ValueError("capability must contain a value")
     if capability["type"] not in capabilities:
         raise ValueError(f"capability type {capability['type']} is not supported")
@@ -106,10 +87,22 @@ class GoveeAPI:
             json = await response.json()
             return json["data"]
 
-    async def control_device(self, data: dict):
-        if validate_data(data):
+    async def control_device(
+        self,
+        sku: str,
+        device: str,
+        capability: dict,
+        request_id: str = str(uuid.uuid4()),
+    ):
+        payload = {
+            "sku": sku,
+            "device": device,
+            "capability": capability,
+        }
+        body = {"requestId": request_id, "payload": payload}
+        if validate_capability(capability):
             async with self.client.post(
-                "/router/api/v1/device/control", json=data
+                "/router/api/v1/device/control", json=body
             ) as response:
                 return await response.json()
 
@@ -129,6 +122,15 @@ class GoveeAPI:
                 raise RuntimeError("Request ID mismatch")
             return json["payload"]
 
-    async def get_dynamic_device(self):
-        async with self.client.post("/router/api/v1/device/scenes") as response:
+    async def get_dynamic_device(
+        self, sku: str, device: str, request_id: str = str(uuid.uuid4())
+    ):
+        payload = {
+            "sku": sku,
+            "device": device,
+        }
+        body = {"requestId": request_id, "payload": payload}
+        async with self.client.post(
+            "/router/api/v1/device/scenes", json=body
+        ) as response:
             return await response.json()
