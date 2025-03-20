@@ -82,7 +82,12 @@ class GoveeAPI:
             raise_for_status=validate_response,
         )
 
-    async def get_devices(self):
+    async def get_devices(self) -> list[dict]:
+        """
+        Get all devices associated with the API key
+        more info: https://developer.govee.com/reference/get-you-devices
+        :return: list of devices
+        """
         async with self.client.get("/router/api/v1/user/devices") as response:
             json = await response.json()
             return json["data"]
@@ -94,6 +99,15 @@ class GoveeAPI:
         capability: dict,
         request_id: str = str(uuid.uuid4()),
     ):
+        """
+        Control a device
+        more info: https://developer.govee.com/reference/control-you-devices
+        :param sku: The SKU of the device to control
+        :param device: The device ID to control
+        :param capability: The capability to control
+        :param request_id: Optional request ID
+        :return:
+        """
         payload = {
             "sku": sku,
             "device": device,
@@ -108,7 +122,15 @@ class GoveeAPI:
 
     async def get_device_state(
         self, sku: str, device: str, request_id: str = str(uuid.uuid4())
-    ):
+    ) -> dict:
+        """
+        Get the state of a device
+        more info: https://developer.govee.com/reference/get-devices-status
+        :param sku: The SKU of the device to get the state of
+        :param device: The device ID to get the state of
+        :param request_id: Optional request ID
+        :return: The device
+        """
         payload = {
             "sku": sku,
             "device": device,
@@ -122,9 +144,16 @@ class GoveeAPI:
                 raise RuntimeError("Request ID mismatch")
             return json["payload"]
 
-    async def get_dynamic_device(
+    async def get_dynamic_light_scene(
         self, sku: str, device: str, request_id: str = str(uuid.uuid4())
-    ):
+    ) -> dict:
+        """
+        Get the dynamic light scene of a light device
+        :param sku: The SKU of the device to get the dynamic light scene of
+        :param device: The device ID to get the dynamic light scene of
+        :param request_id: Optional request ID
+        :return: The dynamic light scene
+        """
         payload = {
             "sku": sku,
             "device": device,
