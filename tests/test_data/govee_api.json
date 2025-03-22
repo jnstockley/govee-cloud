@@ -1241,5 +1241,41 @@
             }
         ]
     }
+},
+  "get_diy_scene": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "payload": {
+        "sku": "H618E",
+        "device": "8C:2E:9C:04:A0:03:82:D1",
+        "capabilities": [
+            {
+                "type": "devices.capabilities.diy_color_setting",
+                "instance": "diyScene",
+                "parameters": {
+                    "dataType": "ENUM",
+                    "options": [
+                        {
+                            "name": "Xmas lights 2",
+                            "value": 8216931
+                        },
+                        {
+                            "name": "Xmas",
+                            "value": 8216930
+                        },
+                        {
+                            "name": "White lights non holid",
+                            "value": 8216929
+                        },
+                        {
+                            "name": "test",
+                            "value": 8216643
+                        }
+                    ]
+                }
+            }
+        ]
+    }
 }
 }
