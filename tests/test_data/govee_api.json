@@ -505,5 +505,343 @@
         }
       ]
     }
+  },
+  "control_device_off": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.on_off",
+      "instance": "powerSwitch",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "control_device_on": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.on_off",
+      "instance": "powerSwitch",
+      "state": {
+        "status": "success"
+      },
+      "value": 1
+    }
+  },
+  "oscillation_toggle": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "oscillationToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "nightlight_toggle": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "nightlightToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "air_deflector_toggle": {
+    "requestId": "fdfd-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "airDeflectorToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "gradient_toggle": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "gradientToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "thermostat_toggle": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "thermostatToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "warm_mist_toggle": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "warmMistToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "color_rgb_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.color_setting",
+      "instance": "colorRgb",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "color_temperature_k_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.color_setting",
+      "instance": "colorTemperatureK",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "night_light_scene_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.mode",
+      "instance": "nightlightScene",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "preset_scene_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.mode",
+      "instance": "nightlightScene",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "brightness_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.range",
+      "instance": "brightness",
+      "state": {
+        "status": "success"
+      },
+      "value": 50
+    }
+  },
+  "humidity_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.range",
+      "instance": "humidity",
+      "state": {
+        "status": "success"
+      },
+      "value": 50
+    }
+  },
+  "work_mode_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 1,
+        "modeValue": 1
+      }
+    }
+  },
+  "segmented_color_rgb_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.segment_color_setting",
+      "instance": "segmentedColorRgb",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "segment": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "rgb": "0x0000ff"
+      }
+    }
+  },
+  "segmented_brightness_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.segment_color_setting",
+      "instance": "segmentedBrightness",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "segment": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "brightness": 50
+      }
+    }
+  },
+  "light_scene_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.dynamic_scene",
+      "instance": "lightScene",
+      "state": {
+        "status": "success"
+      },
+      "value": 4
+    }
+  },
+  "diy_scene_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.dynamic_scene",
+      "instance": "diyScene",
+      "state": {
+        "status": "success"
+      },
+      "value": 4
+    }
+  },
+  "snapshot_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.dynamic_scene",
+      "instance": "snapshot",
+      "state": {
+        "status": "success"
+      },
+      "value": 4
+    }
+  },
+  "music_mode_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.music_setting",
+      "instance": "musicMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "musicMode": 25,
+        "sensitivity": 50
+      }
+    }
+  },
+  "target_temperature_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.temperature_setting",
+      "instance": "targetTemperature",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "temperature": 25,
+        "unit": "Celsius"
+      }
+    }
+  },
+  "slider_temperature_capability": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.temperature_range",
+      "instance": "sliderTemperature",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "autoStop": 1,
+        "temperature": 25,
+        "unit": "Celsius"
+      }
+    }
   }
 }
