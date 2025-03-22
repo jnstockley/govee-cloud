@@ -146,7 +146,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, capability_off, request_id=uuid
         )
 
-        self.assertEqual(result_off, mock_response_off)
+        self.assertEqual(result_off, mock_response_off["capability"])
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -158,7 +158,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, capability_on, request_id=uuid
         )
 
-        self.assertEqual(result_on, mock_response_on)
+        self.assertEqual(result_on, mock_response_on["capability"])
 
     async def test_control_device_toggle(self):
         sku = "H7143"
@@ -223,7 +223,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, oscillation_toggle, request_id=uuid
         )
 
-        self.assertEqual(result_oscillation_toggle, mock_oscillation_toggle)
+        self.assertEqual(
+            result_oscillation_toggle, mock_oscillation_toggle["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -235,7 +237,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, nightlight_toggle, request_id=uuid
         )
 
-        self.assertEqual(result_nightlight_togglee, mock_nightlight_toggle)
+        self.assertEqual(
+            result_nightlight_togglee, mock_nightlight_toggle["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -247,7 +251,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, air_deflector_toggle, request_id=uuid
         )
 
-        self.assertEqual(result_air_deflector_toggle, mock_air_deflector_toggle)
+        self.assertEqual(
+            result_air_deflector_toggle, mock_air_deflector_toggle["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -259,7 +265,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, gradient_toggle, request_id=uuid
         )
 
-        self.assertEqual(result_gradient_toggle, mock_gradient_toggle)
+        self.assertEqual(result_gradient_toggle, mock_gradient_toggle["capability"])
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -271,7 +277,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, thermostat_toggle, request_id=uuid
         )
 
-        self.assertEqual(result_thermostat_toggle, mock_thermostat_toggle)
+        self.assertEqual(result_thermostat_toggle, mock_thermostat_toggle["capability"])
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -283,7 +289,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, warm_mist_toggle, request_id=uuid
         )
 
-        self.assertEqual(result_warm_mist_toggle, mock_warm_mist_toggle)
+        self.assertEqual(result_warm_mist_toggle, mock_warm_mist_toggle["capability"])
 
     async def test_control_device_color_setting(self):
         sku = "H7143"
@@ -318,7 +324,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, color_rgb_capability, request_id=uuid
         )
 
-        self.assertEqual(result_color_rgb_capability, mock_color_rgb_capability)
+        self.assertEqual(
+            result_color_rgb_capability, mock_color_rgb_capability["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -331,7 +339,8 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            result_color_temperature_k_capability, mock_color_temperature_k_capability
+            result_color_temperature_k_capability,
+            mock_color_temperature_k_capability["capability"],
         )
 
     async def test_control_device_mode(self):
@@ -368,7 +377,8 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            result_night_light_scene_capability, mock_night_light_scene_capability
+            result_night_light_scene_capability,
+            mock_night_light_scene_capability["capability"],
         )
 
         self.mock_aioresponse.post(
@@ -381,7 +391,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, preset_scene_capability, request_id=uuid
         )
 
-        self.assertEqual(result_preset_scene_capability, mock_preset_scene_capability)
+        self.assertEqual(
+            result_preset_scene_capability, mock_preset_scene_capability["capability"]
+        )
 
     async def test_control_device_range(self):
         sku = "H7143"
@@ -414,7 +426,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, brightness_capability, request_id=uuid
         )
 
-        self.assertEqual(result_brightness_capability, mock_brightness_capability)
+        self.assertEqual(
+            result_brightness_capability, mock_brightness_capability["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -426,7 +440,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, humidity_capability, request_id=uuid
         )
 
-        self.assertEqual(result_humidity_capability, mock_humidity_capability)
+        self.assertEqual(
+            result_humidity_capability, mock_humidity_capability["capability"]
+        )
 
     async def test_control_device_work_mode(self):
         sku = "H7143"
@@ -451,7 +467,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, work_mode_capability, request_id=uuid
         )
 
-        self.assertEqual(result_work_mode_capability, mock_work_mode_capability)
+        self.assertEqual(
+            result_work_mode_capability, mock_work_mode_capability["capability"]
+        )
 
     async def test_control_segment_color_setting(self):
         sku = "H7143"
@@ -489,7 +507,8 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            result_segmented_color_rgb_capability, mock_segmented_color_rgb_capability
+            result_segmented_color_rgb_capability,
+            mock_segmented_color_rgb_capability["capability"],
         )
 
         self.mock_aioresponse.post(
@@ -503,7 +522,8 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            result_segmented_brightness_capability, mock_segmented_brightness_capability
+            result_segmented_brightness_capability,
+            mock_segmented_brightness_capability["capability"],
         )
 
     async def test_control_segment_dynamic_scene(self):
@@ -545,7 +565,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, light_scene_capability, request_id=uuid
         )
 
-        self.assertEqual(result_light_scene_capability, mock_light_scene_capability)
+        self.assertEqual(
+            result_light_scene_capability, mock_light_scene_capability["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -557,7 +579,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, diy_scene_capability, request_id=uuid
         )
 
-        self.assertEqual(result_diy_scene_capability, mock_diy_scene_capability)
+        self.assertEqual(
+            result_diy_scene_capability, mock_diy_scene_capability["capability"]
+        )
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -569,7 +593,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, snapshot_capability, request_id=uuid
         )
 
-        self.assertEqual(result_snapshot_capability, mock_snapshot_capability)
+        self.assertEqual(
+            result_snapshot_capability, mock_snapshot_capability["capability"]
+        )
 
     async def test_control_music_setting(self):
         sku = "H7143"
@@ -594,7 +620,9 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             sku, device, music_mode_capability, request_id=uuid
         )
 
-        self.assertEqual(result_music_mode_capability, mock_music_mode_capability)
+        self.assertEqual(
+            result_music_mode_capability, mock_music_mode_capability["capability"]
+        )
 
     async def test_control_temperature_setting(self):
         sku = "H7143"
@@ -632,7 +660,8 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            result_target_temperature_capability, mock_target_temperature_capability
+            result_target_temperature_capability,
+            mock_target_temperature_capability["capability"],
         )
 
         self.mock_aioresponse.post(
@@ -646,10 +675,11 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            result_slider_temperature_capability, mock_slider_temperature_capability
+            result_slider_temperature_capability,
+            mock_slider_temperature_capability["capability"],
         )
 
-    async def test_invalid_capability(self):
+    async def test_control_device_invalid_capability(self):
         sku = "H7143"
         device = "52:8B:D4:AD:FC:45:5D:FE"
         uuid = "98e662be-9837-439f-833e-83b5152142f5"
@@ -775,3 +805,103 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
             await self.govee.control_device(
                 sku, device, invalid_instance_type, request_id=uuid
             )
+
+    async def test_control_device_bad_uuid(self):
+        sku = "H7143"
+        device = "52:8B:D4:AD:FC:45:5D:FE"
+        invalid_uuid = "invalid-request-id"
+
+        capability_off = {
+            "type": "devices.capabilities.on_off",
+            "instance": "powerSwitch",
+            "value": 0,
+        }
+
+        mock_response_off = self.test_data["control_device_off"]
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control",
+            status=200,
+            payload=mock_response_off,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.control_device(
+                sku, device, capability_off, request_id=invalid_uuid
+            )
+
+    async def test_get_dynamic_light_scene(self):
+        sku = "H7143"
+        device = "52:8B:D4:AD:FC:45:5D:FE"
+
+        invalid_uuid = "invalid-request-id"
+
+        uuid = "98e662be-9837-439f-833e-83b5152142f5"
+
+        mock_response = self.test_data["get_dynamic_light_scene"]
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/scenes",
+            status=200,
+            payload=mock_response,
+        )
+
+        result = await self.govee.get_dynamic_light_scene(sku, device, request_id=uuid)
+
+        self.assertEqual(result, mock_response["payload"])
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/scenes",
+            status=200,
+            payload=mock_response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_dynamic_light_scene(
+                sku, device, request_id=invalid_uuid
+            )
+
+    async def test_bad_api_response(self):
+        response = {"code": 400}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
+
+        response = {"code": 400, "message": "Missing Parameter"}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
+
+        response = {"code": 400, "msg": "Missing Parameter"}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
+
+        response = {"code": 200, "msg": "Success"}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()

@@ -120,7 +120,10 @@ class GoveeAPI:
             async with self.client.post(
                 "/router/api/v1/device/control", json=body
             ) as response:
-                return await response.json()
+                json = await response.json()
+                if json["requestId"] != request_id:
+                    raise RuntimeError("Request ID mismatch")
+                return json["capability"]
 
     async def get_device_state(
         self, sku: str, device: str, request_id: str = str(uuid.uuid4())
@@ -164,4 +167,7 @@ class GoveeAPI:
         async with self.client.post(
             "/router/api/v1/device/scenes", json=body
         ) as response:
-            return await response.json()
+            json = await response.json()
+            if json["requestId"] != request_id:
+                raise RuntimeError("Request ID mismatch")
+            return json["payload"]
