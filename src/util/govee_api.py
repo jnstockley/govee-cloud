@@ -171,3 +171,26 @@ class GoveeAPI:
             if json["requestId"] != request_id:
                 raise RuntimeError("Request ID mismatch")
             return json["payload"]
+
+    async def get_diy_scene(
+        self, sku: str, device: str, request_id: str = str(uuid.uuid4())
+    ) -> dict:
+        """
+        Get the DIY scene of a light device
+        :param sku: The SKU of the device to get the dynamic light scene of
+        :param device: The device ID to get the dynamic light scene of
+        :param request_id: Optional request ID
+        :return: The DIY scene
+        """
+        payload = {
+            "sku": sku,
+            "device": device,
+        }
+        body = {"requestId": request_id, "payload": payload}
+        async with self.client.post(
+            "/router/api/v1/device/diy-scenes", json=body
+        ) as response:
+            json = await response.json()
+            if json["requestId"] != request_id:
+                raise RuntimeError("Request ID mismatch")
+            return json["payload"]

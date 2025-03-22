@@ -861,6 +861,37 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
                 sku, device, request_id=invalid_uuid
             )
 
+    async def test_get_diy_scene(self):
+        sku = "H7143"
+        device = "52:8B:D4:AD:FC:45:5D:FE"
+
+        invalid_uuid = "invalid-request-id"
+
+        uuid = "98e662be-9837-439f-833e-83b5152142f5"
+
+        mock_response = self.test_data["get_diy_scene"]
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/diy-scenes",
+            status=200,
+            payload=mock_response,
+        )
+
+        result = await self.govee.get_diy_scene(sku, device, request_id=uuid)
+
+        self.assertEqual(result, mock_response["payload"])
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/diy-scenes",
+            status=200,
+            payload=mock_response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_diy_scene(
+                sku, device, request_id=invalid_uuid
+            )
+
     async def test_bad_api_response(self):
         response = {"code": 400}
 
