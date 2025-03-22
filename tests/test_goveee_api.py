@@ -806,9 +806,36 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
                 sku, device, invalid_instance_type, request_id=uuid
             )
 
+    async def test_control_device_bad_uuid(self):
+        sku = "H7143"
+        device = "52:8B:D4:AD:FC:45:5D:FE"
+        invalid_uuid = "invalid-request-id"
+
+        capability_off = {
+            "type": "devices.capabilities.on_off",
+            "instance": "powerSwitch",
+            "value": 0,
+        }
+
+        mock_response_off = self.test_data["control_device_off"]
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control",
+            status=200,
+            payload=mock_response_off,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.control_device(
+                sku, device, capability_off, request_id=invalid_uuid
+            )
+
     async def test_get_dynamic_light_scene(self):
         sku = "H7143"
         device = "52:8B:D4:AD:FC:45:5D:FE"
+
+        invalid_uuid = "invalid-request-id"
+
         uuid = "98e662be-9837-439f-833e-83b5152142f5"
 
         mock_response = self.test_data["get_dynamic_light_scene"]
@@ -822,3 +849,59 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         result = await self.govee.get_dynamic_light_scene(sku, device, request_id=uuid)
 
         self.assertEqual(result, mock_response["payload"])
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/scenes",
+            status=200,
+            payload=mock_response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_dynamic_light_scene(
+                sku, device, request_id=invalid_uuid
+            )
+
+    async def test_bad_api_response(self):
+        response = {"code": 400}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
+
+        response = {"code": 400, "message": "Missing Parameter"}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
+
+        response = {"code": 400, "msg": "Missing Parameter"}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
+
+        response = {"code": 200, "msg": "Success"}
+
+        self.mock_aioresponse.get(
+            "https://openapi.api.govee.com/router/api/v1/user/devices",
+            status=200,
+            payload=response,
+        )
+
+        with self.assertRaises(RuntimeError):
+            await self.govee.get_devices()
