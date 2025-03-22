@@ -44,7 +44,11 @@ async def validate_response(response: aiohttp.ClientResponse):
             )
         else:
             raise RuntimeError(f"Request failed with error code {response['code']}")
-    if "data" not in response and "payload" not in response:
+    if (
+        "data" not in response
+        and "payload" not in response
+        and "capability" not in response
+    ):
         raise RuntimeError("Response does not contain data")
 
 
@@ -53,10 +57,8 @@ def validate_capability(capability: dict) -> bool:
         raise ValueError("capability must contain a type")
     if "instance" not in capability or type(capability["instance"]) is not str:
         raise ValueError("capability must contain an instance")
-    if (
-        "value" not in capability
-        or type(capability["value"]) is not int
-        or type(capability["value"]) is not dict
+    if "value" not in capability or (
+        type(capability["value"]) is not int and type(capability["value"]) is not dict
     ):
         raise ValueError("capability must contain a value")
     if capability["type"] not in capabilities:
