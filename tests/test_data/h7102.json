@@ -1,0 +1,109 @@
+{
+  "power_switch_response": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.on_off",
+      "instance": "powerSwitch",
+      "state": {
+        "status": "success"
+      },
+      "value": 1
+    }
+  },
+  "oscillation_response": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "oscillationToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "work_mode_response": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 1,
+        "modeValue": 1
+      }
+    }
+  },
+  "fan_speed_response": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 1,
+        "modeValue": 1
+      }
+    }
+  },
+  "update_response": {
+    "requestId": "uuid",
+    "msg": "success",
+    "code": 200,
+    "payload": {
+      "sku": "H7102",
+      "device": "18:43:D4:AD:FC:BB:44:DA",
+      "capabilities": [
+        {
+          "type": "devices.capabilities.online",
+          "instance": "online",
+          "state": {
+            "value": true
+          }
+        },
+        {
+          "type": "devices.capabilities.on_off",
+          "instance": "powerSwitch",
+          "state": {
+            "value": 0
+          }
+        },
+        {
+          "type": "devices.capabilities.toggle",
+          "instance": "oscillationToggle",
+          "state": {
+            "value": 0
+          }
+        },
+        {
+          "type": "devices.capabilities.unknown",
+          "instance": "oscillationToggle",
+          "state": {
+            "value": 0
+          }
+        },
+        {
+          "type": "devices.capabilities.work_mode",
+          "instance": "workMode",
+          "state": {
+            "value": {
+              "workMode": 1,
+              "modeValue": 2
+            }
+          }
+        }
+      ]
+    }
+  }
+}
