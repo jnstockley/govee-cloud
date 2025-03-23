@@ -888,9 +888,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
         )
 
         with self.assertRaises(RuntimeError):
-            await self.govee.get_diy_scene(
-                sku, device, request_id=invalid_uuid
-            )
+            await self.govee.get_diy_scene(sku, device, request_id=invalid_uuid)
 
     async def test_bad_api_response(self):
         response = {"code": 400}

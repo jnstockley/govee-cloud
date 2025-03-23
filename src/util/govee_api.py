@@ -71,13 +71,14 @@ def validate_capability(capability: dict) -> bool:
 
 
 class GoveeAPI:
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, ignore_request_id=False):
         self.api_key = api_key
         self.base_url = "https://openapi.api.govee.com"
         self.headers = {
             "Govee-API-Key": self.api_key,
             "Content-Type": "application/json",
         }
+        self.ignore_request_id = ignore_request_id
         self.client = aiohttp.ClientSession(
             base_url=self.base_url,
             headers=self.headers,
@@ -121,7 +122,7 @@ class GoveeAPI:
                 "/router/api/v1/device/control", json=body
             ) as response:
                 json = await response.json()
-                if json["requestId"] != request_id:
+                if json["requestId"] != request_id and not self.ignore_request_id:
                     raise RuntimeError("Request ID mismatch")
                 return json["capability"]
 
@@ -145,7 +146,7 @@ class GoveeAPI:
             "/router/api/v1/device/state", json=body
         ) as response:
             json = await response.json()
-            if json["requestId"] != request_id:
+            if json["requestId"] != request_id and not self.ignore_request_id:
                 raise RuntimeError("Request ID mismatch")
             return json["payload"]
 
@@ -168,7 +169,7 @@ class GoveeAPI:
             "/router/api/v1/device/scenes", json=body
         ) as response:
             json = await response.json()
-            if json["requestId"] != request_id:
+            if json["requestId"] != request_id and not self.ignore_request_id:
                 raise RuntimeError("Request ID mismatch")
             return json["payload"]
 
@@ -191,6 +192,6 @@ class GoveeAPI:
             "/router/api/v1/device/diy-scenes", json=body
         ) as response:
             json = await response.json()
-            if json["requestId"] != request_id:
+            if json["requestId"] != request_id and not self.ignore_request_id:
                 raise RuntimeError("Request ID mismatch")
             return json["payload"]
