@@ -98,7 +98,7 @@ class TestH7102(IsolatedAsyncioTestCase):
     async def test_update(self):
         mock_response = self.test_data["update_response"]
 
-        with patch('devices.fan.h7102.log.warning') as mock_logging:
+        with patch("devices.fan.h7102.log.warning") as mock_logging:
             self.mock_aioresponse.post(
                 "https://openapi.api.govee.com/router/api/v1/device/state",
                 status=200,
@@ -109,8 +109,9 @@ class TestH7102(IsolatedAsyncioTestCase):
             self.assertEqual(self.device.oscillation_toggle, False)
             self.assertEqual(self.device.work_mode, "Normal")
             self.assertEqual(self.device.fan_speed, 2)
-            mock_logging.assert_called_once_with("Found unknown capability type devices.capabilities.unknown")
-
+            mock_logging.assert_called_once_with(
+                "Found unknown capability type devices.capabilities.unknown"
+            )
 
     async def test_str(self):
         expected_device_str = "Name: Smart Tower Fan, SKU: H7102, Device ID: test-device-id, Online: False, Power Switch: False, Oscillation Toggle: False, Work Mode: Normal, Fan Speed: 1"
