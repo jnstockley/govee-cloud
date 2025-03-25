@@ -3,6 +3,7 @@
 import logging
 from devices.device_type import DeviceType
 from util.govee_api import GoveeAPI
+from util.govee_appliance_api import GoveeApplianceAPI
 
 log = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ class H7102:
         self.work_mode_dict = {
             1: "Normal",
             2: "Custom",
-            3: "Auto",
+            3: "Normal",
             5: "Sleep",
             6: "Nature",
         }
@@ -95,7 +96,7 @@ class H7102:
         self.oscillation_toggle = oscillation
 
     # TODO API Returns failure when setting work mode to anything but Normal (1)
-    async def set_work_mode(self, api: GoveeAPI, work_mode: str):
+    async def set_work_mode(self, api: GoveeApplianceAPI, work_mode: str):
         """
         Set the work mode of the device
         :param api: The Govee API
@@ -109,13 +110,9 @@ class H7102:
             if value == work_mode:
                 work_mode_key = key
 
-        capability = {
-            "type": "devices.capabilities.work_mode",
-            "instance": "workMode",
-            "value": {"workMode": work_mode_key, "modeValue": self.fan_speed},
-        }
+        cmd = {"name": "mode", "value": work_mode_key}
 
-        await api.control_device(self.sku, self.device_id, capability)
+        await api.control_device(self.sku, self.device_id, cmd)
         self.work_mode = work_mode
 
     async def set_fan_speed(self, api: GoveeAPI, fan_speed: int):

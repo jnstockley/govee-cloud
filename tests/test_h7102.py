@@ -7,12 +7,14 @@ from aioresponses import aioresponses
 
 from devices.fan.h7102 import H7102
 from util.govee_api import GoveeAPI
+from util.govee_appliance_api import GoveeApplianceAPI
 
 
 class TestH7102(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.api_key = "test-api-key"
         self.govee = GoveeAPI(self.api_key, ignore_request_id=True)
+        self.govee_appliance = GoveeApplianceAPI(self.api_key)
         self.device_id = "test-device-id"
         self.device = H7102(self.device_id)
         self.mock_aioresponse = aioresponses()
@@ -68,16 +70,16 @@ class TestH7102(IsolatedAsyncioTestCase):
     async def test_work_mode(self):
         mock_response = self.test_data["work_mode_response"]
 
-        self.mock_aioresponse.post(
-            "https://openapi.api.govee.com/router/api/v1/device/control",
+        self.mock_aioresponse.put(
+            "https://developer-api.govee.com/v1/appliance/devices/control",
             status=200,
             payload=mock_response,
         )
-        await self.device.set_work_mode(self.govee, "Normal")
+        await self.device.set_work_mode(self.govee_appliance, "Normal")
         self.assertEqual(self.device.work_mode, "Normal")
 
         with self.assertRaises(ValueError):
-            await self.device.set_work_mode(self.govee, "Invalid")
+            await self.device.set_work_mode(self.govee_appliance, "Invalid")
 
     async def test_fan_speed(self):
         mock_response = self.test_data["fan_speed_response"]
