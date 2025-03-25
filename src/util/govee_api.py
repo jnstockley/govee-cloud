@@ -101,7 +101,7 @@ class GoveeAPI:
         device: str,
         capability: dict,
         request_id: str = str(uuid.uuid4()),
-    ):
+    ) -> dict | None:
         """
         Control a device
         more info: https://developer.govee.com/reference/control-you-devices
@@ -109,7 +109,7 @@ class GoveeAPI:
         :param device: The device ID to control
         :param capability: The capability to control
         :param request_id: Optional request ID
-        :return:
+        :return: The capability
         """
         payload = {
             "sku": sku,

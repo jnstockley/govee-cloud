@@ -26,20 +26,9 @@
     }
   },
   "work_mode_response": {
-    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
-    "msg": "success",
     "code": 200,
-    "capability": {
-      "type": "devices.capabilities.work_mode",
-      "instance": "workMode",
-      "state": {
-        "status": "success"
-      },
-      "value": {
-        "workMode": 1,
-        "modeValue": 1
-      }
-    }
+    "message": "Success",
+    "data": {}
   },
   "fan_speed_response": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
