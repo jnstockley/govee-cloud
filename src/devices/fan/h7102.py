@@ -95,7 +95,6 @@ class H7102:
         await api.control_device(self.sku, self.device_id, capability)
         self.oscillation_toggle = oscillation
 
-    # TODO API Returns failure when setting work mode to anything but Normal (1)
     async def set_work_mode(self, api: GoveeApplianceAPI, work_mode: str):
         """
         Set the work mode of the device
