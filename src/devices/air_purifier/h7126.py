@@ -1,9 +1,10 @@
 """Smart Air Purifier"""
 
 import logging
+import time
+
 from devices.device_type import DeviceType
 from util.govee_api import GoveeAPI
-from util.govee_appliance_api import GoveeApplianceAPI
 
 log = logging.getLogger(__name__)
 
@@ -11,12 +12,10 @@ log = logging.getLogger(__name__)
 class H7126:
     def __init__(self, device_id: str):
         self.work_mode_dict = {
-            0: "Custom",
             1: "Sleep",
             2: "Low",
             3: "High",
-            4: "Auto",
-            5: "Custom",
+            4: "Custom",
         }
         self.sku: str = "H7126"
         self.device_id: str = device_id
@@ -25,14 +24,11 @@ class H7126:
         self.online: bool = False
         self.power_switch: bool = False
         self.work_mode: str = self.work_mode_dict[1]
-        self.speed: int = 1
-        self.min_speed: int = 1
-        self.max_speed: int = 3
         self.filter_life: int = 0
         self.air_quality: int = 0
 
     def __str__(self):
-        return f"Name: {self.device_name}, SKU: {self.sku}, Device ID: {self.device_id}, Online: {self.online}, Power Switch: {self.power_switch}, Work Mode: {self.work_mode}, Speed: {self.speed}, Filter Life: {self.filter_life}, Air Quality: {self.air_quality}"
+        return f"Name: {self.device_name}, SKU: {self.sku}, Device ID: {self.device_id}, Online: {self.online}, Power Switch: {self.power_switch}, Work Mode: {self.work_mode}, Filter Life: {self.filter_life}, Air Quality: {self.air_quality}"
 
     async def update(self, api: GoveeAPI):
         """
@@ -48,10 +44,12 @@ class H7126:
             elif capability_type == "devices.capabilities.on_off":
                 self.power_switch = capability["state"]["value"] == 1
             elif capability_type == "devices.capabilities.work_mode":
-                self.work_mode = self.work_mode_dict[
-                    capability["state"]["value"]["modeValue"]
-                ]
-                self.speed = capability["state"]["value"]["workMode"]
+                if capability["state"]["value"]["workMode"] == 2:
+                    self.work_mode = "Custom"
+                else:
+                    self.work_mode = self.work_mode_dict[
+                        capability["state"]["value"]["modeValue"]
+                    ]
             elif capability_type == "devices.capabilities.property":
                 instance = capability["instance"]
                 if instance == "filterLifeTime":
@@ -90,8 +88,7 @@ class H7126:
         await api.control_device(self.sku, self.device_id, capability)
         self.power_switch = False
 
-    # TODO Custom work mode doesn't update
-    async def set_work_mode(self, api: GoveeApplianceAPI, work_mode: str):
+    async def set_work_mode(self, api: GoveeAPI, work_mode: str):
         """
         Set the work mode of the device
         :param api: The Govee API
@@ -100,12 +97,29 @@ class H7126:
         if work_mode not in self.work_mode_dict.values():
             raise ValueError(f"Invalid work mode {work_mode}")
 
-        work_mode_key = None
-        for key, value in self.work_mode_dict.items():
-            if value == work_mode:
-                work_mode_key = key
+        if work_mode == 'Custom':
+            value = {
+                "workMode": 2,
+                "modeValue": 0
+            }
+        else:
+            work_mode_key = None
+            for key, value in self.work_mode_dict.items():
+                if value == work_mode:
+                    work_mode_key = key
 
-        cmd = {"name": "mode", "value": work_mode_key}
+            value = {
+                "workMode": 1,
+                "modeValue": work_mode_key
+            }
 
-        await api.control_device(self.sku, self.device_id, cmd)
+        capability = {
+            "type": "devices.capabilities.work_mode",
+            "instance": "workMode",
+            "value": value,
+        }
+
+        await api.control_device(self.sku, self.device_id, capability)
         self.work_mode = work_mode
+        # Add a delay to allow the device to update
+        time.sleep(0.5)

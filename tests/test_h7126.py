@@ -31,6 +31,7 @@ class TestH7126(IsolatedAsyncioTestCase):
 
     async def test_update(self):
         mock_response = self.test_data["update_response"]
+        mock_response_custom = self.test_data["update_response_custom"]
 
         with patch("devices.air_purifier.h7126.log.warning") as mock_logging:
             self.mock_aioresponse.post(
@@ -42,7 +43,6 @@ class TestH7126(IsolatedAsyncioTestCase):
             self.assertEqual(self.device.online, True)
             self.assertEqual(self.device.power_switch, True)
             self.assertEqual(self.device.work_mode, "Low")
-            self.assertEqual(self.device.speed, 1)
             self.assertEqual(self.device.filter_life, 0)
             self.assertEqual(self.device.air_quality, 6)
 
@@ -55,8 +55,20 @@ class TestH7126(IsolatedAsyncioTestCase):
             # Verify there were exactly 2 calls
             self.assertEqual(mock_logging.call_count, 2)
 
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/state",
+            status=200,
+            payload=mock_response_custom,
+        )
+        await self.device.update(self.govee)
+        self.assertEqual(self.device.online, True)
+        self.assertEqual(self.device.power_switch, True)
+        self.assertEqual(self.device.work_mode, "Custom")
+        self.assertEqual(self.device.filter_life, 0)
+        self.assertEqual(self.device.air_quality, 6)
+
     async def test_str(self):
-        expected_device_str = "Name: Smart Air Purifier, SKU: H7126, Device ID: test-device-id, Online: False, Power Switch: False, Work Mode: Sleep, Speed: 1, Filter Life: 0, Air Quality: 0"
+        expected_device_str = "Name: Smart Air Purifier, SKU: H7126, Device ID: test-device-id, Online: False, Power Switch: False, Work Mode: Sleep, Filter Life: 0, Air Quality: 0"
         device_str = self.device.__str__()
         assert device_str == expected_device_str
 
@@ -81,14 +93,23 @@ class TestH7126(IsolatedAsyncioTestCase):
 
     async def test_work_mode(self):
         mock_response = self.test_data["work_mode_response"]
+        mock_response_custom = self.test_data["work_mode_response_custom"]
 
-        self.mock_aioresponse.put(
-            "https://developer-api.govee.com/v1/appliance/devices/control",
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control",
             status=200,
             payload=mock_response,
         )
-        await self.device.set_work_mode(self.govee_appliance, "Low")
+        await self.device.set_work_mode(self.govee, "Low")
         self.assertEqual(self.device.work_mode, "Low")
 
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control",
+            status=200,
+            payload=mock_response_custom,
+        )
+        await self.device.set_work_mode(self.govee, "Custom")
+        self.assertEqual(self.device.work_mode, "Custom")
+
         with self.assertRaises(ValueError):
-            await self.device.set_work_mode(self.govee_appliance, "Invalid")
+            await self.device.set_work_mode(self.govee, "Invalid")
