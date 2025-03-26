@@ -92,4 +92,3 @@ class TestH7126(IsolatedAsyncioTestCase):
 
         with self.assertRaises(ValueError):
             await self.device.set_work_mode(self.govee_appliance, "Invalid")
-
