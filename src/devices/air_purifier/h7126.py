@@ -97,21 +97,15 @@ class H7126:
         if work_mode not in self.work_mode_dict.values():
             raise ValueError(f"Invalid work mode {work_mode}")
 
-        if work_mode == 'Custom':
-            value = {
-                "workMode": 2,
-                "modeValue": 0
-            }
+        if work_mode == "Custom":
+            value = {"workMode": 2, "modeValue": 0}
         else:
             work_mode_key = None
             for key, value in self.work_mode_dict.items():
                 if value == work_mode:
                     work_mode_key = key
 
-            value = {
-                "workMode": 1,
-                "modeValue": work_mode_key
-            }
+            value = {"workMode": 1, "modeValue": work_mode_key}
 
         capability = {
             "type": "devices.capabilities.work_mode",
