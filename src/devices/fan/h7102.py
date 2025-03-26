@@ -42,7 +42,7 @@ class H7102:
         for capability in capabilities:
             capability_type: str = capability["type"]
             if capability_type == "devices.capabilities.online":
-                self.online = capability["state"]["value"] == "true"
+                self.online = capability["state"]["value"]
             elif capability_type == "devices.capabilities.on_off":
                 self.power_switch = capability["state"]["value"] == 1
             elif capability_type == "devices.capabilities.toggle":
