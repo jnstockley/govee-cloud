@@ -1,0 +1,83 @@
+{
+  "power_switch_response": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.on_off",
+      "instance": "powerSwitch",
+      "state": {
+        "status": "success"
+      },
+      "value": 1
+    }
+  },
+  "work_mode_response": {
+    "code": 200,
+    "message": "Success",
+    "data": {}
+  },
+  "update_response": {
+    "requestId": "uuid",
+    "msg": "success",
+    "code": 200,
+    "payload": {
+      "sku": "H7126",
+      "device": "17:65:60:74:F4:FA:1A:8C",
+      "capabilities": [
+        {
+          "type": "devices.capabilities.online",
+          "instance": "online",
+          "state": {
+            "value": true
+          }
+        },
+        {
+          "type": "devices.capabilities.on_off",
+          "instance": "powerSwitch",
+          "state": {
+            "value": 1
+          }
+        },
+        {
+          "type": "devices.capabilities.work_mode",
+          "instance": "workMode",
+          "state": {
+            "value": {
+              "workMode": 1,
+              "modeValue": 2
+            }
+          }
+        },
+        {
+          "type": "devices.capabilities.property",
+          "instance": "filterLifeTime",
+          "state": {
+            "value": 0
+          }
+        },
+        {
+          "type": "devices.capabilities.property",
+          "instance": "airQuality",
+          "state": {
+            "value": 6
+          }
+        },
+        {
+          "type": "devices.capabilities.property",
+          "instance": "unknown",
+          "state": {
+            "value": 6
+          }
+        },
+        {
+          "type": "devices.capabilities.unknown",
+          "instance": "oscillationToggle",
+          "state": {
+            "value": 0
+          }
+        }
+      ]
+    }
+  }
+}

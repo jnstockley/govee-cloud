@@ -3,6 +3,7 @@
 import logging
 from devices.device_type import DeviceType
 from util.govee_api import GoveeAPI
+from util.govee_appliance_api import GoveeApplianceAPI
 
 log = logging.getLogger(__name__)
 
@@ -62,3 +63,49 @@ class H7126:
                     continue
             else:
                 log.warning(f"Found unknown capability type {capability_type}")
+
+    async def turn_on(self, api: GoveeAPI):
+        """
+        Turn on the device
+        :param api: The Govee API
+        """
+        capability = {
+            "type": "devices.capabilities.on_off",
+            "instance": "powerSwitch",
+            "value": 1,
+        }
+        await api.control_device(self.sku, self.device_id, capability)
+        self.power_switch = True
+
+    async def turn_off(self, api: GoveeAPI):
+        """
+        Turn off the device
+        :param api: The Govee API
+        """
+        capability = {
+            "type": "devices.capabilities.on_off",
+            "instance": "powerSwitch",
+            "value": 0,
+        }
+        await api.control_device(self.sku, self.device_id, capability)
+        self.power_switch = False
+
+    # TODO Custom work mode doesn't update
+    async def set_work_mode(self, api: GoveeApplianceAPI, work_mode: str):
+        """
+        Set the work mode of the device
+        :param api: The Govee API
+        :param work_mode: The work mode to set, must be in self.work_mode_dict.values()
+        """
+        if work_mode not in self.work_mode_dict.values():
+            raise ValueError(f"Invalid work mode {work_mode}")
+
+        work_mode_key = None
+        for key, value in self.work_mode_dict.items():
+            if value == work_mode:
+                work_mode_key = key
+
+        cmd = {"name": "mode", "value": work_mode_key}
+
+        await api.control_device(self.sku, self.device_id, cmd)
+        self.work_mode = work_mode
