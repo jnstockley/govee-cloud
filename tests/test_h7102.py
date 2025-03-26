@@ -107,6 +107,7 @@ class TestH7102(IsolatedAsyncioTestCase):
                 payload=mock_response,
             )
             await self.device.update(self.govee)
+            self.assertEqual(self.device.online, True)
             self.assertEqual(self.device.power_switch, False)
             self.assertEqual(self.device.oscillation_toggle, False)
             self.assertEqual(self.device.work_mode, "Normal")

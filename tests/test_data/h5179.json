@@ -1,0 +1,48 @@
+{
+  "update_response": {
+    "requestId": "uuid",
+    "msg": "success",
+    "code": 200,
+    "payload": {
+      "sku": "H5179",
+      "device": "CE:28:18:CE:B9:41:D4:11",
+      "capabilities": [
+        {
+          "type": "devices.capabilities.online",
+          "instance": "online",
+          "state": {
+            "value": true
+          }
+        },
+        {
+          "type": "devices.capabilities.unknown",
+          "instance": "oscillationToggle",
+          "state": {
+            "value": 0
+          }
+        },
+        {
+          "type": "devices.capabilities.property",
+          "instance": "sensorTemperature",
+          "state": {
+            "value": 66.74
+          }
+        },
+        {
+          "type": "devices.capabilities.property",
+          "instance": "sensorHumidity",
+          "state": {
+            "value": 50
+          }
+        },
+        {
+          "type": "devices.capabilities.property",
+          "instance": "unknown",
+          "state": {
+            "value": 66.74
+          }
+        }
+      ]
+    }
+  }
+}
