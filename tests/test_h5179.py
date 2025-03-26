@@ -10,7 +10,7 @@ from util.govee_api import GoveeAPI
 from util.govee_appliance_api import GoveeApplianceAPI
 
 
-class TestH7102(IsolatedAsyncioTestCase):
+class TestH5179(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.api_key = "test-api-key"
         self.govee = GoveeAPI(self.api_key, ignore_request_id=True)
@@ -44,7 +44,9 @@ class TestH7102(IsolatedAsyncioTestCase):
             self.assertEqual(self.device.humidity, 50)
 
             # Check that each warning was called exactly once
-            mock_logging.assert_any_call("Found unknown capability type devices.capabilities.unknown")
+            mock_logging.assert_any_call(
+                "Found unknown capability type devices.capabilities.unknown"
+            )
             mock_logging.assert_any_call("Found unknown instance unknown")
 
             # Verify there were exactly 2 calls
