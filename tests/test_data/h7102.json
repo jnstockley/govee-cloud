@@ -1,5 +1,5 @@
 {
-  "power_switch_response": {
+  "power_switch_on": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -12,7 +12,33 @@
       "value": 1
     }
   },
-  "oscillation_response": {
+  "power_switch_off":  {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.on_off",
+      "instance": "powerSwitch",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "oscillation_on":  {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.toggle",
+      "instance": "oscillationToggle",
+      "state": {
+        "status": "success"
+      },
+      "value": 1
+    }
+  },
+  "oscillation_off": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -25,23 +51,7 @@
       "value": 0
     }
   },
-  "work_mode_response": {
-    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
-    "msg": "success",
-    "code": 200,
-    "capability": {
-      "type": "devices.capabilities.work_mode",
-      "instance": "workMode",
-      "state": {
-        "status": "success"
-      },
-      "value": {
-        "workMode": 1,
-        "modeValue": 1
-      }
-    }
-  },
-  "work_mode_response_custom": {
+  "custom_work_mode": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -53,11 +63,59 @@
       },
       "value": {
         "workMode": 2,
-        "modeValue": 1
+        "modeValue": 0
       }
     }
   },
-  "fan_speed_response": {
+  "auto_work_mode": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 3,
+        "modeValue": 0
+      }
+    }
+  },
+  "sleep_work_mode": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 5,
+        "modeValue": 0
+      }
+    }
+  },
+  "nature_work_mode": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 6,
+        "modeValue": 0
+      }
+    }
+  },
+  "normal_work_mode": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -73,8 +131,24 @@
       }
     }
   },
-  "update_response": {
-    "requestId": "uuid",
+  "fan_speed": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 1,
+        "modeValue": 2
+      }
+    }
+  },
+  "update": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
     "payload": {

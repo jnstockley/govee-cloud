@@ -1,5 +1,5 @@
 {
-  "power_switch_response": {
+  "power_switch_on": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -12,7 +12,36 @@
       "value": 1
     }
   },
-  "work_mode_response": {
+  "power_switch_off": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.on_off",
+      "instance": "powerSwitch",
+      "state": {
+        "status": "success"
+      },
+      "value": 0
+    }
+  },
+  "sleep_work_mode": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 1,
+        "modeValue": 1
+      }
+    }
+  },
+  "low_work_mode": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -28,7 +57,23 @@
       }
     }
   },
-  "work_mode_response_custom": {
+  "high_work_mode": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
+    "msg": "success",
+    "code": 200,
+    "capability": {
+      "type": "devices.capabilities.work_mode",
+      "instance": "workMode",
+      "state": {
+        "status": "success"
+      },
+      "value": {
+        "workMode": 1,
+        "modeValue": 3
+      }
+    }
+  },
+  "custom_work_mode": {
     "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
@@ -44,8 +89,8 @@
       }
     }
   },
-  "update_response": {
-    "requestId": "uuid",
+  "update": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
     "payload": {
@@ -107,8 +152,8 @@
       ]
     }
   },
-  "update_response_custom": {
-    "requestId": "uuid",
+  "update_custom_work_mode": {
+    "requestId": "98e662be-9837-439f-833e-83b5152142f5",
     "msg": "success",
     "code": 200,
     "payload": {
@@ -135,7 +180,7 @@
           "state": {
             "value": {
               "workMode": 2,
-              "modeValue": 0
+              "modeValue": 2
             }
           }
         },
