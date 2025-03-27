@@ -3,7 +3,6 @@
 import logging
 from devices.device_type import DeviceType
 from util.govee_api import GoveeAPI
-from util.govee_appliance_api import GoveeApplianceAPI
 
 log = logging.getLogger(__name__)
 
@@ -13,7 +12,7 @@ class H7102:
         self.work_mode_dict = {
             1: "Normal",
             2: "Custom",
-            3: "Normal",
+            3: "Auto",
             5: "Sleep",
             6: "Nature",
         }
@@ -95,7 +94,7 @@ class H7102:
         await api.control_device(self.sku, self.device_id, capability)
         self.oscillation_toggle = oscillation
 
-    async def set_work_mode(self, api: GoveeApplianceAPI, work_mode: str):
+    async def set_work_mode(self, api: GoveeAPI, work_mode: str):
         """
         Set the work mode of the device
         :param api: The Govee API
@@ -104,14 +103,23 @@ class H7102:
         if work_mode not in self.work_mode_dict.values():
             raise ValueError(f"Invalid work mode {work_mode}")
 
-        work_mode_key = None
-        for key, value in self.work_mode_dict.items():
-            if value == work_mode:
-                work_mode_key = key
+        if work_mode == "Normal":
+            await self.update(api)
+            value = {"workMode": 1, "modeValue": self.fan_speed}
+        else:
+            work_mode_key = None
+            for key, value in self.work_mode_dict.items():
+                if value == work_mode:
+                    work_mode_key = key
+            value = {"workMode": work_mode_key, "modeValue": 0}
 
-        cmd = {"name": "mode", "value": work_mode_key}
+        capability = {
+            "type": "devices.capabilities.work_mode",
+            "instance": "workMode",
+            "value": value,
+        }
 
-        await api.control_device(self.sku, self.device_id, cmd)
+        await api.control_device(self.sku, self.device_id, capability)
         self.work_mode = work_mode
 
     async def set_fan_speed(self, api: GoveeAPI, fan_speed: int):
@@ -125,15 +133,10 @@ class H7102:
                 f"Fan speed must be between {self.min_fan_speed} and {self.max_fan_speed}"
             )
 
-        work_mode_key = None
-        for key, value in self.work_mode_dict.items():
-            if value == self.work_mode:
-                work_mode_key = key
-
         capability = {
             "type": "devices.capabilities.work_mode",
             "instance": "workMode",
-            "value": {"workMode": work_mode_key, "modeValue": fan_speed},
+            "value": {"workMode": 1, "modeValue": fan_speed},
         }
         await api.control_device(self.sku, self.device_id, capability)
         self.fan_speed = fan_speed
