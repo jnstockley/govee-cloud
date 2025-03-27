@@ -69,9 +69,7 @@ class H7126:
             if response["value"]["workMode"] == 2:
                 self.work_mode = "Custom"
             else:
-                self.work_mode = self.work_mode_dict[
-                    response["value"]["modeValue"]
-                ]
+                self.work_mode = self.work_mode_dict[response["value"]["modeValue"]]
         else:
             log.warning(f"Found unknown capability type {capability_type}")
 

@@ -137,13 +137,8 @@ class TestH7126(IsolatedAsyncioTestCase):
         capability = {
             "type": "devices.capabilities.unknown",
             "instance": "workMode",
-            "state": {
-                "status": "success"
-            },
-            "value": {
-                "workMode": 2,
-                "modeValue": 0
-            }
+            "state": {"status": "success"},
+            "value": {"workMode": 2, "modeValue": 0},
         }
 
         with patch("devices.air_purifier.h7126.log.warning") as mock_logging:

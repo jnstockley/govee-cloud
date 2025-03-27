@@ -61,9 +61,7 @@ class H7102:
         elif capability_type == "devices.capabilities.toggle":
             self.oscillation_toggle = response["value"] == 1
         elif capability_type == "devices.capabilities.work_mode":
-            self.work_mode = self.work_mode_dict[
-                response["value"]["workMode"]
-            ]
+            self.work_mode = self.work_mode_dict[response["value"]["workMode"]]
             self.fan_speed = response["value"]["modeValue"]
         else:
             log.warning(f"Found unknown capability type {capability_type}")

@@ -86,7 +86,7 @@ class TestH7102(IsolatedAsyncioTestCase):
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
             status=200,
-            payload=mock_response_auto
+            payload=mock_response_auto,
         )
         await self.device.set_work_mode(self.govee, "Auto")
         self.assertEqual(self.device.work_mode, "Auto")
@@ -178,13 +178,8 @@ class TestH7102(IsolatedAsyncioTestCase):
         capability = {
             "type": "devices.capabilities.unknown",
             "instance": "workMode",
-            "state": {
-                "status": "success"
-            },
-            "value": {
-                "workMode": 2,
-                "modeValue": 0
-            }
+            "state": {"status": "success"},
+            "value": {"workMode": 2, "modeValue": 0},
         }
 
         with patch("devices.fan.h7102.log.warning") as mock_logging:
@@ -192,4 +187,3 @@ class TestH7102(IsolatedAsyncioTestCase):
             mock_logging.assert_called_once_with(
                 "Found unknown capability type devices.capabilities.unknown"
             )
-
