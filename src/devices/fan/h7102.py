@@ -54,6 +54,20 @@ class H7102:
             else:
                 log.warning(f"Found unknown capability type {capability_type}")
 
+    def parse_response(self, response: dict):
+        capability_type = response["type"]
+        if capability_type == "devices.capabilities.on_off":
+            self.power_switch = response["value"] == 1
+        elif capability_type == "devices.capabilities.toggle":
+            self.oscillation_toggle = response["value"] == 1
+        elif capability_type == "devices.capabilities.work_mode":
+            self.work_mode = self.work_mode_dict[
+                response["value"]["workMode"]
+            ]
+            self.fan_speed = response["value"]["modeValue"]
+        else:
+            log.warning(f"Found unknown capability type {capability_type}")
+
     async def turn_on(self, api: GoveeAPI):
         """
         Turn on the device
@@ -64,8 +78,8 @@ class H7102:
             "instance": "powerSwitch",
             "value": 1,
         }
-        await api.control_device(self.sku, self.device_id, capability)
-        self.power_switch = True
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)
 
     async def turn_off(self, api: GoveeAPI):
         """
@@ -77,8 +91,8 @@ class H7102:
             "instance": "powerSwitch",
             "value": 0,
         }
-        await api.control_device(self.sku, self.device_id, capability)
-        self.power_switch = False
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)
 
     async def toggle_oscillation(self, api: GoveeAPI, oscillation: bool):
         """
@@ -91,8 +105,8 @@ class H7102:
             "instance": "oscillationToggle",
             "value": 1 if oscillation else 0,
         }
-        await api.control_device(self.sku, self.device_id, capability)
-        self.oscillation_toggle = oscillation
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)
 
     async def set_work_mode(self, api: GoveeAPI, work_mode: str):
         """
@@ -119,8 +133,8 @@ class H7102:
             "value": value,
         }
 
-        await api.control_device(self.sku, self.device_id, capability)
-        self.work_mode = work_mode
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)
 
     async def set_fan_speed(self, api: GoveeAPI, fan_speed: int):
         """
@@ -138,5 +152,5 @@ class H7102:
             "instance": "workMode",
             "value": {"workMode": 1, "modeValue": fan_speed},
         }
-        await api.control_device(self.sku, self.device_id, capability)
-        self.fan_speed = fan_speed
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)

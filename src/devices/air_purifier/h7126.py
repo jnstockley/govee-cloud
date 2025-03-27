@@ -1,7 +1,6 @@
 """Smart Air Purifier"""
 
 import logging
-import time
 
 from devices.device_type import DeviceType
 from util.govee_api import GoveeAPI
@@ -62,6 +61,20 @@ class H7126:
             else:
                 log.warning(f"Found unknown capability type {capability_type}")
 
+    def parse_response(self, response: dict):
+        capability_type: str = response["type"]
+        if capability_type == "devices.capabilities.on_off":
+            self.power_switch = response["value"] == 1
+        elif capability_type == "devices.capabilities.work_mode":
+            if response["value"]["workMode"] == 2:
+                self.work_mode = "Custom"
+            else:
+                self.work_mode = self.work_mode_dict[
+                    response["value"]["modeValue"]
+                ]
+        else:
+            log.warning(f"Found unknown capability type {capability_type}")
+
     async def turn_on(self, api: GoveeAPI):
         """
         Turn on the device
@@ -72,8 +85,8 @@ class H7126:
             "instance": "powerSwitch",
             "value": 1,
         }
-        await api.control_device(self.sku, self.device_id, capability)
-        self.power_switch = True
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)
 
     async def turn_off(self, api: GoveeAPI):
         """
@@ -85,8 +98,8 @@ class H7126:
             "instance": "powerSwitch",
             "value": 0,
         }
-        await api.control_device(self.sku, self.device_id, capability)
-        self.power_switch = False
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)
 
     async def set_work_mode(self, api: GoveeAPI, work_mode: str):
         """
@@ -113,7 +126,5 @@ class H7126:
             "value": value,
         }
 
-        await api.control_device(self.sku, self.device_id, capability)
-        self.work_mode = work_mode
-        # Add a delay to allow the device to update
-        time.sleep(0.5)
+        response = await api.control_device(self.sku, self.device_id, capability)
+        self.parse_response(response)

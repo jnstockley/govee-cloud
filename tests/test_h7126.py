@@ -30,8 +30,8 @@ class TestH7126(IsolatedAsyncioTestCase):
         self.mock_aioresponse.stop()
 
     async def test_update(self):
-        mock_response = self.test_data["update_response"]
-        mock_response_custom = self.test_data["update_response_custom"]
+        mock_response = self.test_data["update"]
+        mock_response_custom = self.test_data["update_custom_work_mode"]
 
         with patch("devices.air_purifier.h7126.log.warning") as mock_logging:
             self.mock_aioresponse.post(
@@ -73,12 +73,13 @@ class TestH7126(IsolatedAsyncioTestCase):
         assert device_str == expected_device_str
 
     async def test_power_switch(self):
-        mock_response = self.test_data["power_switch_response"]
+        mock_response_on = self.test_data["power_switch_on"]
+        mock_response_off = self.test_data["power_switch_off"]
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
             status=200,
-            payload=mock_response,
+            payload=mock_response_on,
         )
         await self.device.turn_on(self.govee)
         self.assertTrue(self.device.power_switch)
@@ -86,22 +87,40 @@ class TestH7126(IsolatedAsyncioTestCase):
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
             status=200,
-            payload=mock_response,
+            payload=mock_response_off,
         )
         await self.device.turn_off(self.govee)
         self.assertFalse(self.device.power_switch)
 
     async def test_work_mode(self):
-        mock_response = self.test_data["work_mode_response"]
-        mock_response_custom = self.test_data["work_mode_response_custom"]
+        mock_response_sleep = self.test_data["sleep_work_mode"]
+        mock_response_low = self.test_data["low_work_mode"]
+        mock_response_high = self.test_data["high_work_mode"]
+        mock_response_custom = self.test_data["custom_work_mode"]
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
             status=200,
-            payload=mock_response,
+            payload=mock_response_sleep,
+        )
+        await self.device.set_work_mode(self.govee, "Sleep")
+        self.assertEqual(self.device.work_mode, "Sleep")
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control",
+            status=200,
+            payload=mock_response_low,
         )
         await self.device.set_work_mode(self.govee, "Low")
         self.assertEqual(self.device.work_mode, "Low")
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control",
+            status=200,
+            payload=mock_response_high,
+        )
+        await self.device.set_work_mode(self.govee, "High")
+        self.assertEqual(self.device.work_mode, "High")
 
         self.mock_aioresponse.post(
             "https://openapi.api.govee.com/router/api/v1/device/control",
@@ -113,3 +132,22 @@ class TestH7126(IsolatedAsyncioTestCase):
 
         with self.assertRaises(ValueError):
             await self.device.set_work_mode(self.govee, "Invalid")
+
+    async def test_invalid_capability(self):
+        capability = {
+            "type": "devices.capabilities.unknown",
+            "instance": "workMode",
+            "state": {
+                "status": "success"
+            },
+            "value": {
+                "workMode": 2,
+                "modeValue": 0
+            }
+        }
+
+        with patch("devices.air_purifier.h7126.log.warning") as mock_logging:
+            self.device.parse_response(capability)
+            mock_logging.assert_called_once_with(
+                "Found unknown capability type devices.capabilities.unknown"
+            )
