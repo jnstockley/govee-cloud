@@ -26,21 +26,25 @@ class H5179:
         Update the device state
         :param api: The Govee API
         """
-        state = await api.get_device_state(self.sku, self.device_id)
-        capabilities: dict = state["capabilities"]
-        for capability in capabilities:
-            capability_type: str = capability["type"]
-            if capability_type == "devices.capabilities.online":
-                print(capability["state"]["value"])
-                self.online = capability["state"]["value"]
-            elif capability_type == "devices.capabilities.property":
-                instance = capability["instance"]
-                if instance == "sensorTemperature":
-                    self.temperature = capability["state"]["value"]
-                elif instance == "sensorHumidity":
-                    self.humidity = capability["state"]["value"]
+        try:
+            state = await api.get_device_state(self.sku, self.device_id)
+            capabilities: dict = state["capabilities"]
+            for capability in capabilities:
+                capability_type: str = capability["type"]
+                if capability_type == "devices.capabilities.online":
+                    print(capability["state"]["value"])
+                    self.online = capability["state"]["value"]
+                elif capability_type == "devices.capabilities.property":
+                    instance = capability["instance"]
+                    if instance == "sensorTemperature":
+                        self.temperature = capability["state"]["value"]
+                    elif instance == "sensorHumidity":
+                        self.humidity = capability["state"]["value"]
+                    else:
+                        log.warning(f"Found unknown instance {instance}")
+                        continue
                 else:
-                    log.warning(f"Found unknown instance {instance}")
-                    continue
-            else:
-                log.warning(f"Found unknown capability type {capability_type}")
+                    log.warning(f"Found unknown capability type {capability_type}")
+        except Exception as e:
+            self.online = False
+            log.error(f"Error updating device state: {e}")

@@ -34,32 +34,36 @@ class H7126:
         Update the device state
         :param api: The Govee API
         """
-        state = await api.get_device_state(self.sku, self.device_id)
-        capabilities: dict = state["capabilities"]
-        for capability in capabilities:
-            capability_type: str = capability["type"]
-            if capability_type == "devices.capabilities.online":
-                self.online = capability["state"]["value"]
-            elif capability_type == "devices.capabilities.on_off":
-                self.power_switch = capability["state"]["value"] == 1
-            elif capability_type == "devices.capabilities.work_mode":
-                if capability["state"]["value"]["workMode"] == 2:
-                    self.work_mode = "Custom"
+        try:
+            state = await api.get_device_state(self.sku, self.device_id)
+            capabilities: dict = state["capabilities"]
+            for capability in capabilities:
+                capability_type: str = capability["type"]
+                if capability_type == "devices.capabilities.online":
+                    self.online = capability["state"]["value"]
+                elif capability_type == "devices.capabilities.on_off":
+                    self.power_switch = capability["state"]["value"] == 1
+                elif capability_type == "devices.capabilities.work_mode":
+                    if capability["state"]["value"]["workMode"] == 2:
+                        self.work_mode = "Custom"
+                    else:
+                        self.work_mode = self.work_mode_dict[
+                            capability["state"]["value"]["modeValue"]
+                        ]
+                elif capability_type == "devices.capabilities.property":
+                    instance = capability["instance"]
+                    if instance == "filterLifeTime":
+                        self.filter_life = capability["state"]["value"]
+                    elif instance == "airQuality":
+                        self.air_quality = capability["state"]["value"]
+                    else:
+                        log.warning(f"Found unknown instance {instance}")
+                        continue
                 else:
-                    self.work_mode = self.work_mode_dict[
-                        capability["state"]["value"]["modeValue"]
-                    ]
-            elif capability_type == "devices.capabilities.property":
-                instance = capability["instance"]
-                if instance == "filterLifeTime":
-                    self.filter_life = capability["state"]["value"]
-                elif instance == "airQuality":
-                    self.air_quality = capability["state"]["value"]
-                else:
-                    log.warning(f"Found unknown instance {instance}")
-                    continue
-            else:
-                log.warning(f"Found unknown capability type {capability_type}")
+                    log.warning(f"Found unknown capability type {capability_type}")
+        except Exception as e:
+            self.online = False
+            log.error(f"Error updating device state: {e}")
 
     def parse_response(self, response: dict):
         capability_type: str = response["type"]
