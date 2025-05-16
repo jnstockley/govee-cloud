@@ -36,23 +36,27 @@ class H7102:
         Update the device state
         :param api: The Govee API
         """
-        state = await api.get_device_state(self.sku, self.device_id)
-        capabilities: dict = state["capabilities"]
-        for capability in capabilities:
-            capability_type: str = capability["type"]
-            if capability_type == "devices.capabilities.online":
-                self.online = capability["state"]["value"]
-            elif capability_type == "devices.capabilities.on_off":
-                self.power_switch = capability["state"]["value"] == 1
-            elif capability_type == "devices.capabilities.toggle":
-                self.oscillation_toggle = capability["state"]["value"] == 1
-            elif capability_type == "devices.capabilities.work_mode":
-                self.work_mode = self.work_mode_dict[
-                    capability["state"]["value"]["workMode"]
-                ]
-                self.fan_speed = capability["state"]["value"]["modeValue"]
-            else:
-                log.warning(f"Found unknown capability type {capability_type}")
+        try:
+            state = await api.get_device_state(self.sku, self.device_id)
+            capabilities: dict = state["capabilities"]
+            for capability in capabilities:
+                capability_type: str = capability["type"]
+                if capability_type == "devices.capabilities.online":
+                    self.online = capability["state"]["value"]
+                elif capability_type == "devices.capabilities.on_off":
+                    self.power_switch = capability["state"]["value"] == 1
+                elif capability_type == "devices.capabilities.toggle":
+                    self.oscillation_toggle = capability["state"]["value"] == 1
+                elif capability_type == "devices.capabilities.work_mode":
+                    self.work_mode = self.work_mode_dict[
+                        capability["state"]["value"]["workMode"]
+                    ]
+                    self.fan_speed = capability["state"]["value"]["modeValue"]
+                else:
+                    log.warning(f"Found unknown capability type {capability_type}")
+        except Exception as e:
+            self.online = False
+            log.error(f"Error updating device state: {e}")
 
     def parse_response(self, response: dict):
         capability_type = response["type"]
