@@ -1,38 +1,78 @@
+import logging
+from types import SimpleNamespace
+
 import aiohttp
+from aiohttp import ClientSession, TraceRequestEndParams, TraceRequestStartParams
+
+logger = logging.getLogger("govee-cloud")
+
 
 cmds = ["mode", "turn", "gear"]
 
 
 async def validate_response(response: aiohttp.ClientResponse):
-    if response.status != 200:
-        raise RuntimeError(
-            f"Request failed with status code {response.status} and message {response.reason}"
-        )
-    response: dict = await response.json()
-    if "code" in response:
-        if response["code"] != 200 and response["message"] != "Success":
-            raise RuntimeError(
-                f"Request failed with error code {response['code']} and message {response['message']}"
-            )
-    elif "status" in response:
-        if response["status"] != 200 and response["message"] != "Success":
-            raise RuntimeError(
-                f"Request failed with error code {response['status']} and message {response['message']}"
-            )
-    else:
-        raise RuntimeError(f"Request failed with error code {response}")
+    if response.status == 200:
+        response: dict = await response.json()
+        if "code" in response:
+            if response["code"] != 200 and response["message"] != "Success":
+                logger.error(
+                    "Request failed with error code %s and message %s",
+                    response["code"],
+                    response["message"],
+                )
+                raise RuntimeError(
+                    f"Request failed with error code {response['code']} and message {response['message']}"
+                )
+        elif "status" in response:
+            if response["status"] != 200 and response["message"] != "Success":
+                logger.error(
+                    "Request failed with error code %s and message %s",
+                    response["status"],
+                    response["message"],
+                )
+                raise RuntimeError(
+                    f"Request failed with error code {response['status']} and message {response['message']}"
+                )
+        else:
+            logger.error("Request failed with error code %s", response)
+            raise RuntimeError(f"Request failed with error code {response}")
 
 
 def validate_cmd(cmd: dict) -> bool:
     if cmd["name"] not in cmds:
+        logger.error("Command %s is not supported", cmd["name"])
         raise ValueError(f"Command {cmd['name']} is not supported")
     if cmd["name"] == "turn" and cmd["value"] not in ["on", "off"]:
+        logger.error("Value %s is not supported for command 'turn'", cmd["value"])
         raise ValueError("Value must be `on` or `off` for command 'turn'")
     if (cmd["name"] == "mode" or cmd["name"] == "gear") and type(
         cmd["value"]
     ) is not int:
+        logger.error(
+            "Value %s is not supported for command 'mode' or 'gear'", cmd["value"]
+        )
         raise ValueError("Value must be an integer for command 'mode' or 'gear'")
     return True
+
+
+async def on_request_start(
+    session: ClientSession, context: SimpleNamespace, params: TraceRequestStartParams
+) -> None:
+    logger.info("making %s request to %s", params.method, params.url)
+
+
+async def on_request_end(
+    session: ClientSession, context: SimpleNamespace, params: TraceRequestEndParams
+) -> None:
+    data = await params.response.read()
+    data = data.decode("utf-8") if data else None
+    logger.info(
+        "%s request to %s completed with status %s and data %s",
+        params.method,
+        params.url,
+        params.response.status,
+        data,
+    )
 
 
 class GoveeApplianceAPI:
@@ -43,10 +83,14 @@ class GoveeApplianceAPI:
             "Govee-API-Key": self.api_key,
             "Content-Type": "application/json",
         }
+        trace_config = aiohttp.TraceConfig()
+        trace_config.on_request_start.append(on_request_start)
+        trace_config.on_request_end.append(on_request_end)
         self.client = aiohttp.ClientSession(
             base_url=self.base_url,
             headers=self.headers,
             raise_for_status=validate_response,
+            trace_configs=[trace_config],
         )
 
     async def control_device(self, model: str, device: str, cmd: dict) -> dict | None:
@@ -64,3 +108,4 @@ class GoveeApplianceAPI:
             ) as response:
                 json = await response.json()
                 return json["data"]
+        return None
