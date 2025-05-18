@@ -51,17 +51,3 @@ class H7102(Fan):
         except Exception as e:
             self.online = False
             logger.error(f"Error updating device state: {e}")
-
-    #async def update(self, api: GoveeAPI):
-    #    """
-    #    Update the device state
-    #    :param api: The Govee API
-    #    """
-    #    try:
-    #        state = await api.get_device_state(self.sku, self.device_id)
-    #        capabilities: dict = state["capabilities"]
-    #        super().update(capabilities)
-    #    except Exception as e:
-    #        self.online = False
-    #        logger.error(f"Error updating device state: {e}")
-    #
