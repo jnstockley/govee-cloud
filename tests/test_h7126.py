@@ -153,3 +153,32 @@ class TestH7126(IsolatedAsyncioTestCase):
             mock_logging.assert_called_once_with(
                 "Found unknown capability type devices.capabilities.unknown"
             )
+
+    async def test_rate_limit(self):
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/state",
+            status=429,
+        )
+        await self.device.update(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.turn_on(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.turn_off(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.set_work_mode(self.govee, "Sleep")
+        self.assertEqual(self.device.online, False)

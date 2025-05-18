@@ -21,6 +21,7 @@ class Fan(BasicFan):
         self.fan_speed: int = 1
         self.min_fan_speed: int = min_fan_speed
         self.max_fan_speed: int = max_fan_speed
+        self.speed_work_mode: str = "Normal"
 
     def update(self, capabilities: dict):
         for capability in capabilities:
@@ -47,33 +48,6 @@ class Fan(BasicFan):
         else:
             logger.warning(f"Found unknown capability type {capability_type}")
 
-    async def set_work_mode(self, api: GoveeAPI, work_mode: str):
-        """
-        Set the work mode of the device
-        :param api: The Govee API
-        :param work_mode: The work mode to set, must be in self.work_mode_dict.values()
-        """
-        if work_mode not in self.work_modes.values():
-            raise ValueError(f"Invalid work mode {work_mode}")
-
-        if work_mode == "Normal":
-            value = {"workMode": 1, "modeValue": self.fan_speed}
-        else:
-            work_mode_key = None
-            for key, value in self.work_modes.items():
-                if value == work_mode:
-                    work_mode_key = key
-            value = {"workMode": work_mode_key, "modeValue": 0}
-
-        capability = {
-            "type": "devices.capabilities.work_mode",
-            "instance": "workMode",
-            "value": value,
-        }
-
-        response = await api.control_device(self.sku, self.device_id, capability)
-        self.parse_response(response)
-
     async def toggle_oscillation(self, api: GoveeAPI, oscillation: bool):
         """
         Control the oscillation of the device
@@ -85,8 +59,12 @@ class Fan(BasicFan):
             "instance": "oscillationToggle",
             "value": 1 if oscillation else 0,
         }
-        response = await api.control_device(self.sku, self.device_id, capability)
-        self.parse_response(response)
+        try:
+            response = await api.control_device(self.sku, self.device_id, capability)
+            self.parse_response(response)
+        except Exception as e:
+            self.online = False
+            logger.error(f"Error toggling oscillation: {e}")
 
     async def set_fan_speed(self, api: GoveeAPI, fan_speed: int):
         """
@@ -104,5 +82,9 @@ class Fan(BasicFan):
             "instance": "workMode",
             "value": {"workMode": 1, "modeValue": fan_speed},
         }
-        response = await api.control_device(self.sku, self.device_id, capability)
-        self.parse_response(response)
+        try:
+            response = await api.control_device(self.sku, self.device_id, capability)
+            self.parse_response(response)
+        except Exception as e:
+            self.online = False
+            logger.error(f"Error setting fan speed: {e}")

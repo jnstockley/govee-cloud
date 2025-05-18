@@ -63,3 +63,11 @@ class TestH5179(IsolatedAsyncioTestCase):
         expected_device_str = "Name: Wi-Fi Thermometer, Device ID: test-device-id, Online: False, Temperature: 0.0F, Humidity: 0.0%"
         device_str = self.device.__str__()
         assert device_str == expected_device_str
+
+    async def test_rate_limit(self):
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/state",
+            status=429,
+        )
+        await self.device.update(self.govee)
+        self.assertEqual(self.device.online, False)

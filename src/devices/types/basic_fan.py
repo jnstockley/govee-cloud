@@ -14,6 +14,7 @@ class BasicFan:
         self.online: bool = False
         self.power_switch: bool = False
         self.work_mode: str = self.work_modes[1]
+        self.speed_work_mode: str = "Custom"
 
     def update(self, capability: dict):
         capability_type: str = capability["type"]
@@ -46,8 +47,12 @@ class BasicFan:
             "instance": "powerSwitch",
             "value": 1,
         }
-        response = await api.control_device(self.sku, self.device_id, capability)
-        self.parse_response(response)
+        try:
+            response = await api.control_device(self.sku, self.device_id, capability)
+            self.parse_response(response)
+        except Exception as e:
+            self.online = False
+            logger.error(f"Error turning on device: {e}")
 
     async def turn_off(self, api: GoveeAPI):
         """
@@ -59,8 +64,12 @@ class BasicFan:
             "instance": "powerSwitch",
             "value": 0,
         }
-        response = await api.control_device(self.sku, self.device_id, capability)
-        self.parse_response(response)
+        try:
+            response = await api.control_device(self.sku, self.device_id, capability)
+            self.parse_response(response)
+        except Exception as e:
+            self.online = False
+            logger.error(f"Error turning off device: {e}")
 
     async def set_work_mode(self, api: GoveeAPI, work_mode: str):
         """
@@ -71,7 +80,7 @@ class BasicFan:
         if work_mode not in self.work_modes.values():
             raise ValueError(f"Invalid work mode {work_mode}")
 
-        if work_mode == "Custom":
+        if work_mode == self.speed_work_mode:
             value = {"workMode": 2, "modeValue": 0}
         else:
             work_mode_key = None
@@ -86,6 +95,9 @@ class BasicFan:
             "instance": "workMode",
             "value": value,
         }
-
-        response = await api.control_device(self.sku, self.device_id, capability)
-        self.parse_response(response)
+        try:
+            response = await api.control_device(self.sku, self.device_id, capability)
+            self.parse_response(response)
+        except Exception as e:
+            self.online = False
+            logger.error(f"Error setting work mode: {e}")
