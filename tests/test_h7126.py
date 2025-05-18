@@ -33,7 +33,7 @@ class TestH7126(IsolatedAsyncioTestCase):
         mock_response = self.test_data["update"]
         mock_response_custom = self.test_data["update_custom_work_mode"]
 
-        with patch("devices.air_purifier.h7126.log.warning") as mock_logging:
+        with patch("devices.air_purifier.h7126.logger.warning") as mock_logging:
             self.mock_aioresponse.post(
                 "https://openapi.api.govee.com/router/api/v1/device/state",
                 status=200,
@@ -66,6 +66,13 @@ class TestH7126(IsolatedAsyncioTestCase):
         self.assertEqual(self.device.work_mode, "Custom")
         self.assertEqual(self.device.filter_life, 0)
         self.assertEqual(self.device.air_quality, 6)
+
+        with patch(
+            "devices.air_purifier.h7126.GoveeAPI.get_device_state"
+        ) as mock_get_device_state:
+            mock_get_device_state.side_effect = Exception("Test exception")
+            await self.device.update(self.govee)
+            self.assertEqual(self.device.online, False)
 
     async def test_str(self):
         expected_device_str = "Name: Smart Air Purifier, SKU: H7126, Device ID: test-device-id, Online: False, Power Switch: False, Work Mode: Sleep, Filter Life: 0, Air Quality: 0"
@@ -141,8 +148,37 @@ class TestH7126(IsolatedAsyncioTestCase):
             "value": {"workMode": 2, "modeValue": 0},
         }
 
-        with patch("devices.air_purifier.h7126.log.warning") as mock_logging:
+        with patch("devices.air_purifier.h7126.logger.warning") as mock_logging:
             self.device.parse_response(capability)
             mock_logging.assert_called_once_with(
                 "Found unknown capability type devices.capabilities.unknown"
             )
+
+    async def test_rate_limit(self):
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/state",
+            status=429,
+        )
+        await self.device.update(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.turn_on(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.turn_off(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.set_work_mode(self.govee, "Sleep")
+        self.assertEqual(self.device.online, False)

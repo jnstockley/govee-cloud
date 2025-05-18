@@ -153,7 +153,7 @@ class TestH7102(IsolatedAsyncioTestCase):
     async def test_update(self):
         mock_response = self.test_data["update"]
 
-        with patch("devices.fan.h7102.log.warning") as mock_logging:
+        with patch("devices.fan.h7102.logger.warning") as mock_logging:
             self.mock_aioresponse.post(
                 "https://openapi.api.govee.com/router/api/v1/device/state",
                 status=200,
@@ -169,6 +169,13 @@ class TestH7102(IsolatedAsyncioTestCase):
                 "Found unknown capability type devices.capabilities.unknown"
             )
 
+        with patch(
+            "devices.fan.h7102.GoveeAPI.get_device_state"
+        ) as mock_get_device_state:
+            mock_get_device_state.side_effect = Exception("Test exception")
+            await self.device.update(self.govee)
+            self.assertEqual(self.device.online, False)
+
     async def test_str(self):
         expected_device_str = "Name: Smart Tower Fan, SKU: H7102, Device ID: test-device-id, Online: False, Power Switch: False, Oscillation Toggle: False, Work Mode: Normal, Fan Speed: 1"
         device_str = self.device.__str__()
@@ -182,8 +189,51 @@ class TestH7102(IsolatedAsyncioTestCase):
             "value": {"workMode": 2, "modeValue": 0},
         }
 
-        with patch("devices.fan.h7102.log.warning") as mock_logging:
+        with patch("devices.fan.h7102.logger.warning") as mock_logging:
             self.device.parse_response(capability)
             mock_logging.assert_called_once_with(
                 "Found unknown capability type devices.capabilities.unknown"
             )
+
+    async def test_rate_limit(self):
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/state",
+            status=429,
+        )
+        await self.device.update(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.turn_on(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.turn_off(self.govee)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.set_work_mode(self.govee, "Sleep")
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.toggle_oscillation(self.govee, True)
+        self.assertEqual(self.device.online, False)
+
+        self.mock_aioresponse.post(
+            "https://openapi.api.govee.com/router/api/v1/device/control", status=429
+        )
+
+        await self.device.set_fan_speed(self.govee, 1)
+        self.assertEqual(self.device.online, False)
