@@ -35,33 +35,34 @@ capabilities = {
 
 
 async def validate_response(response: aiohttp.ClientResponse):
-    if response.status == 200:
-        response: dict = await response.json()
-        if response["code"] != 200:
-            if "msg" in response:
-                logger.error(
-                    f"Request failed with error code {response['code']} and message {response['msg']}"
-                )
-                raise RuntimeError(
-                    f"Request failed with error code {response['code']} and message {response['msg']}"
-                )
-            elif "message" in response:
-                logger.error(
-                    f"Request failed with error code {response['code']} and message {response['message']}"
-                )
-                raise RuntimeError(
-                    f"Request failed with error code {response['code']} and message {response['message']}"
-                )
-            else:
-                logger.error(f"Request failed with error code {response['code']}")
-                raise RuntimeError(f"Request failed with error code {response['code']}")
-        if (
-            "data" not in response
-            and "payload" not in response
-            and "capability" not in response
-        ):
-            logger.error("Response does not contain data: %s", response)
-            raise RuntimeError(f"Response does not contain data {response}")
+    if response.status != 200:
+        raise RuntimeError(f"Request failed with status code {response.status}")
+    response: dict = await response.json()
+    if response["code"] != 200:
+        if "msg" in response:
+            logger.error(
+                f"Request failed with error code {response['code']} and message {response['msg']}"
+            )
+            raise RuntimeError(
+                f"Request failed with error code {response['code']} and message {response['msg']}"
+            )
+        elif "message" in response:
+            logger.error(
+                f"Request failed with error code {response['code']} and message {response['message']}"
+            )
+            raise RuntimeError(
+                f"Request failed with error code {response['code']} and message {response['message']}"
+            )
+        else:
+            logger.error(f"Request failed with error code {response['code']}")
+            raise RuntimeError(f"Request failed with error code {response['code']}")
+    if (
+        "data" not in response
+        and "payload" not in response
+        and "capability" not in response
+    ):
+        logger.error("Response does not contain data: %s", response)
+        raise RuntimeError(f"Response does not contain data {response}")
 
 
 def validate_capability(capability: dict) -> bool:

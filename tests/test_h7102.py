@@ -153,7 +153,7 @@ class TestH7102(IsolatedAsyncioTestCase):
     async def test_update(self):
         mock_response = self.test_data["update"]
 
-        with patch("devices.fan.h7102.log.warning") as mock_logging:
+        with patch("devices.fan.h7102.logger.warning") as mock_logging:
             self.mock_aioresponse.post(
                 "https://openapi.api.govee.com/router/api/v1/device/state",
                 status=200,
@@ -182,7 +182,7 @@ class TestH7102(IsolatedAsyncioTestCase):
             "value": {"workMode": 2, "modeValue": 0},
         }
 
-        with patch("devices.fan.h7102.log.warning") as mock_logging:
+        with patch("devices.fan.h7102.logger.warning") as mock_logging:
             self.device.parse_response(capability)
             mock_logging.assert_called_once_with(
                 "Found unknown capability type devices.capabilities.unknown"

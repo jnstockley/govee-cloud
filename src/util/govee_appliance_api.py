@@ -11,31 +11,34 @@ cmds = ["mode", "turn", "gear"]
 
 
 async def validate_response(response: aiohttp.ClientResponse):
-    if response.status == 200:
-        response: dict = await response.json()
-        if "code" in response:
-            if response["code"] != 200 and response["message"] != "Success":
-                logger.error(
-                    "Request failed with error code %s and message %s",
-                    response["code"],
-                    response["message"],
-                )
-                raise RuntimeError(
-                    f"Request failed with error code {response['code']} and message {response['message']}"
-                )
-        elif "status" in response:
-            if response["status"] != 200 and response["message"] != "Success":
-                logger.error(
-                    "Request failed with error code %s and message %s",
-                    response["status"],
-                    response["message"],
-                )
-                raise RuntimeError(
-                    f"Request failed with error code {response['status']} and message {response['message']}"
-                )
-        else:
-            logger.error("Request failed with error code %s", response)
-            raise RuntimeError(f"Request failed with error code {response}")
+    if response.status != 200:
+        raise RuntimeError(
+            f"Request failed with status code {response.status} and message {response.reason}"
+        )
+    response: dict = await response.json()
+    if "code" in response:
+        if response["code"] != 200 and response["message"] != "Success":
+            logger.error(
+                "Request failed with error code %s and message %s",
+                response["code"],
+                response["message"],
+            )
+            raise RuntimeError(
+                f"Request failed with error code {response['code']} and message {response['message']}"
+            )
+    elif "status" in response:
+        if response["status"] != 200 and response["message"] != "Success":
+            logger.error(
+                "Request failed with error code %s and message %s",
+                response["status"],
+                response["message"],
+            )
+            raise RuntimeError(
+                f"Request failed with error code {response['status']} and message {response['message']}"
+            )
+    else:
+        logger.error("Request failed with error code %s", response)
+        raise RuntimeError(f"Request failed with error code {response}")
 
 
 def validate_cmd(cmd: dict) -> bool:

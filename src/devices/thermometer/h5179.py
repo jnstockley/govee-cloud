@@ -5,7 +5,7 @@ import logging
 from devices.device_type import DeviceType
 from util.govee_api import GoveeAPI
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("govee-cloud")
 
 
 class H5179:
