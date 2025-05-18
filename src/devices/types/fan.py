@@ -7,16 +7,23 @@ logger = logging.getLogger("govee-cloud")
 
 
 class Fan(BasicFan):
-
-    def __init__(self, sku: str, device_id: str, device_name: str, work_modes: dict, min_fan_speed: int, max_fan_speed: int):
+    def __init__(
+        self,
+        sku: str,
+        device_id: str,
+        device_name: str,
+        work_modes: dict,
+        min_fan_speed: int,
+        max_fan_speed: int,
+    ):
         super().__init__(sku, device_id, device_name, work_modes)
         self.oscillation_toggle: bool = False
         self.fan_speed: int = 1
         self.min_fan_speed: int = min_fan_speed
         self.max_fan_speed: int = max_fan_speed
 
-    def update(self, capability: dict):
-        for capability in capability["capabilities"]:
+    def update(self, capabilities: dict):
+        for capability in capabilities:
             capability_type: str = capability["type"]
             if capability_type == "devices.capabilities.toggle":
                 self.oscillation_toggle = capability["state"]["value"] == 1
@@ -39,7 +46,6 @@ class Fan(BasicFan):
             self.fan_speed = response["value"]["modeValue"]
         else:
             logger.warning(f"Found unknown capability type {capability_type}")
-
 
     async def set_work_mode(self, api: GoveeAPI, work_mode: str):
         """
@@ -67,7 +73,6 @@ class Fan(BasicFan):
 
         response = await api.control_device(self.sku, self.device_id, capability)
         self.parse_response(response)
-
 
     async def toggle_oscillation(self, api: GoveeAPI, oscillation: bool):
         """
@@ -101,5 +106,3 @@ class Fan(BasicFan):
         }
         response = await api.control_device(self.sku, self.device_id, capability)
         self.parse_response(response)
-
-

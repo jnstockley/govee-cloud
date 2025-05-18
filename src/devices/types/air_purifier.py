@@ -6,7 +6,6 @@ logger = logging.getLogger("govee-cloud")
 
 
 class AirPurifier(BasicFan):
-
     def __init__(self, sku: str, device_id: str, device_name: str, work_modes: dict):
         super().__init__(sku, device_id, device_name, work_modes)
         self.filter_life: int = 0
@@ -33,4 +32,3 @@ class AirPurifier(BasicFan):
                     ]
             else:
                 super().update(capability)
-

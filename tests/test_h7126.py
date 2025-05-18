@@ -67,6 +67,13 @@ class TestH7126(IsolatedAsyncioTestCase):
         self.assertEqual(self.device.filter_life, 0)
         self.assertEqual(self.device.air_quality, 6)
 
+        with patch(
+            "devices.air_purifier.h7126.GoveeAPI.get_device_state"
+        ) as mock_get_device_state:
+            mock_get_device_state.side_effect = Exception("Test exception")
+            await self.device.update(self.govee)
+            self.assertEqual(self.device.online, False)
+
     async def test_str(self):
         expected_device_str = "Name: Smart Air Purifier, SKU: H7126, Device ID: test-device-id, Online: False, Power Switch: False, Work Mode: Sleep, Filter Life: 0, Air Quality: 0"
         device_str = self.device.__str__()

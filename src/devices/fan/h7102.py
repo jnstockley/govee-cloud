@@ -33,21 +33,7 @@ class H7102(Fan):
         try:
             state = await api.get_device_state(self.sku, self.device_id)
             capabilities: dict = state["capabilities"]
-            for capability in capabilities:
-                capability_type: str = capability["type"]
-                if capability_type == "devices.capabilities.online":
-                    self.online = capability["state"]["value"]
-                elif capability_type == "devices.capabilities.on_off":
-                    self.power_switch = capability["state"]["value"] == 1
-                elif capability_type == "devices.capabilities.toggle":
-                    self.oscillation_toggle = capability["state"]["value"] == 1
-                elif capability_type == "devices.capabilities.work_mode":
-                    self.work_mode = self.work_modes[
-                        capability["state"]["value"]["workMode"]
-                    ]
-                    self.fan_speed = capability["state"]["value"]["modeValue"]
-                else:
-                    logger.warning(f"Found unknown capability type {capability_type}")
+            super().update(capabilities)
         except Exception as e:
             self.online = False
             logger.error(f"Error updating device state: {e}")

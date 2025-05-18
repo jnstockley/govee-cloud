@@ -169,6 +169,13 @@ class TestH7102(IsolatedAsyncioTestCase):
                 "Found unknown capability type devices.capabilities.unknown"
             )
 
+        with patch(
+            "devices.fan.h7102.GoveeAPI.get_device_state"
+        ) as mock_get_device_state:
+            mock_get_device_state.side_effect = Exception("Test exception")
+            await self.device.update(self.govee)
+            self.assertEqual(self.device.online, False)
+
     async def test_str(self):
         expected_device_str = "Name: Smart Tower Fan, SKU: H7102, Device ID: test-device-id, Online: False, Power Switch: False, Oscillation Toggle: False, Work Mode: Normal, Fan Speed: 1"
         device_str = self.device.__str__()

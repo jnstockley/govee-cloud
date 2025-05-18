@@ -1,9 +1,9 @@
 import logging
 import uuid
-from types import SimpleNamespace
 
 import aiohttp
-from aiohttp import ClientSession, TraceRequestStartParams, TraceRequestEndParams
+
+from util import on_request_start, on_request_end
 
 logger = logging.getLogger("govee-cloud")
 
@@ -92,26 +92,6 @@ def validate_capability(capability: dict) -> bool:
     return True
 
 
-async def on_request_start(
-    session: ClientSession, context: SimpleNamespace, params: TraceRequestStartParams
-) -> None:
-    logger.info("making %s request to %s", params.method, params.url)
-
-
-async def on_request_end(
-    session: ClientSession, context: SimpleNamespace, params: TraceRequestEndParams
-) -> None:
-    data = await params.response.read()
-    data = data.decode("utf-8") if data else None
-    logger.info(
-        "%s request to %s completed with status %s and data %s",
-        params.method,
-        params.url,
-        params.response.status,
-        data,
-    )
-
-
 class GoveeAPI:
     def __init__(self, api_key: str, ignore_request_id=False):
         self.api_key = api_key
@@ -163,20 +143,17 @@ class GoveeAPI:
             "capability": capability,
         }
         body = {"requestId": request_id, "payload": payload}
-        if validate_capability(capability):
-            async with self.client.post(
-                "/router/api/v1/device/control", json=body
-            ) as response:
-                json = await response.json()
-                if json["requestId"] != request_id and not self.ignore_request_id:
-                    logger.error(
-                        "Request ID mismatch %s %s", json["requestId"], request_id
-                    )
-                    raise RuntimeError(
-                        f"Request ID mismatch {json['requestId']} {request_id}"
-                    )
-                return json["capability"]
-        return None
+        validate_capability(capability)
+        async with self.client.post(
+            "/router/api/v1/device/control", json=body
+        ) as response:
+            json = await response.json()
+            if json["requestId"] != request_id and not self.ignore_request_id:
+                logger.error("Request ID mismatch %s %s", json["requestId"], request_id)
+                raise RuntimeError(
+                    f"Request ID mismatch {json['requestId']} {request_id}"
+                )
+            return json["capability"]
 
     async def get_device_state(
         self, sku: str, device: str, request_id: str = str(uuid.uuid4())

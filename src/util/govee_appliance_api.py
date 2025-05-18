@@ -1,8 +1,8 @@
 import logging
-from types import SimpleNamespace
 
 import aiohttp
-from aiohttp import ClientSession, TraceRequestEndParams, TraceRequestStartParams
+
+from util import on_request_start, on_request_end
 
 logger = logging.getLogger("govee-cloud")
 
@@ -58,26 +58,6 @@ def validate_cmd(cmd: dict) -> bool:
     return True
 
 
-async def on_request_start(
-    session: ClientSession, context: SimpleNamespace, params: TraceRequestStartParams
-) -> None:
-    logger.info("making %s request to %s", params.method, params.url)
-
-
-async def on_request_end(
-    session: ClientSession, context: SimpleNamespace, params: TraceRequestEndParams
-) -> None:
-    data = await params.response.read()
-    data = data.decode("utf-8") if data else None
-    logger.info(
-        "%s request to %s completed with status %s and data %s",
-        params.method,
-        params.url,
-        params.response.status,
-        data,
-    )
-
-
 class GoveeApplianceAPI:
     def __init__(self, api_key: str):
         self.api_key = api_key
@@ -105,10 +85,9 @@ class GoveeApplianceAPI:
         :return: The data response from the API
         """
         body = {"device": device, "model": model, "cmd": cmd}
-        if validate_cmd(cmd):
-            async with self.client.put(
-                "/v1/appliance/devices/control", json=body
-            ) as response:
-                json = await response.json()
-                return json["data"]
-        return None
+        validate_cmd(cmd)
+        async with self.client.put(
+            "/v1/appliance/devices/control", json=body
+        ) as response:
+            json = await response.json()
+            return json["data"]

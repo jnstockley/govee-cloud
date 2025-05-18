@@ -52,6 +52,13 @@ class TestH5179(IsolatedAsyncioTestCase):
             # Verify there were exactly 2 calls
             self.assertEqual(mock_logging.call_count, 2)
 
+        with patch(
+            "devices.thermometer.h5179.GoveeAPI.get_device_state"
+        ) as mock_get_device_state:
+            mock_get_device_state.side_effect = Exception("Test exception")
+            await self.device.update(self.govee)
+            self.assertEqual(self.device.online, False)
+
     async def test_str(self):
         expected_device_str = "Name: Wi-Fi Thermometer, Device ID: test-device-id, Online: False, Temperature: 0.0F, Humidity: 0.0%"
         device_str = self.device.__str__()
