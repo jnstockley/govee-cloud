@@ -32,3 +32,6 @@
 - [X] Handle GitHub pre-release
 - [X] Update PYTHONPATH with src folder
 - [X] Add custom user to Dockerfile
+- [ ] Fix Dockerfile
+- [ ] Fix health check
+- [ ] Fix version number
