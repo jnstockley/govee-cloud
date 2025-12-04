@@ -139,8 +139,6 @@ jobs:
 
       - name: Step 9 - Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-<<<<<<< HEAD
-=======
 
   deploy_docker_image:
     if: github.event_name == 'release' || github.ref_name == 'main'
@@ -301,4 +299,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}
           short-description: ${{ steps.get-repo-description.outputs.result }}
->>>>>>> external/main
