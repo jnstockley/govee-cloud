@@ -1,0 +1,35 @@
+FROM dhi.io/python:3.13.11-dev AS  build
+
+ARG VERSION=0.0.0.dev
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONPATH=/app/src/:$PYTHONPATH
+
+WORKDIR /app
+
+COPY --from=dhi.io/uv:0 /uv /uvx /bin/
+
+COPY ./pyproject.toml .
+COPY ./uv.lock .
+
+RUN uv version ${VERSION} && \
+    uv sync --frozen --no-cache --no-dev
+
+FROM dhi.io/python:3.13.11
+
+# Set up environment variables for production
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONPATH=/app/src/:$PYTHONPATH
+
+WORKDIR /app
+
+COPY . .
+COPY --from=build /app/.venv .venv
+COPY --from=build /app/pyproject.toml .
+COPY --from=build /app/uv.lock .
+
+ENTRYPOINT ["python", "src/main.py"]
