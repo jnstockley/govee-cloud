@@ -136,3 +136,6 @@ jobs:
 
       - name: Step 8 - Build package
         run: uv build
+
+      - name: Step 9 - Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
