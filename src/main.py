@@ -1,6 +1,18 @@
+import sys
+
+from dotenv import load_dotenv
+
+from util.healthcheck import healthcheck
+from util.logging import logger
+
+
 def main():
-    print("Hello from python-starter!")
+    logger.info("Hello from python-starter!")
 
 
 if __name__ == "__main__":
-    main()
+    load_dotenv()
+    if len(sys.argv) > 1 and sys.argv[1] == "healthcheck":
+        healthcheck()
+    else:
+        main()

@@ -4,10 +4,28 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13, <4.0"
+<<<<<<< HEAD
 dependencies = [
     "aiohttp>=3.11.14",
     "asyncio>=3.4.3",
 ]
+=======
+license-files = ["LICENSE"]
+authors = [
+    { name = "Jack Stockley", email = "jack@jstockley.com"}
+]
+keywords = ["starter", "template", "python"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "python-dotenv==1.2.1",
+]
+[project.urls]
+Homepage = "https://github.com/jnstockley/python-starter"
+Repository = "https://github.com/jnstockley/python-starter.git"
+Issues = "https://github.com/jnstockley/python-starter/issues"
+>>>>>>> external/main
 
 [dependency-groups]
 dev = [

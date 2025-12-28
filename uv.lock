@@ -201,6 +201,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "multidict"
 version = "6.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -237,6 +238,30 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/3a/8e/c07a648a9d592fa9f3a19d1c7e1c7738ba95aff90db967a5a09cff1e1f37/multidict-6.2.0-cp313-cp313t-win32.whl", hash = "sha256:e653d36b1bf48fa78c7fcebb5fa679342e025121ace8c87ab05c1cefd33b34fc", size = 28950, upload-time = "2025-03-17T16:55:23.807Z" },
     { url = "https://files.pythonhosted.org/packages/dc/a9/bebb5485b94d7c09831638a4df9a1a924c32431a750723f0bf39cd16a787/multidict-6.2.0-cp313-cp313t-win_amd64.whl", hash = "sha256:ca23db5fb195b5ef4fd1f77ce26cadefdf13dba71dab14dadd29b34d457d7c44", size = 32001, upload-time = "2025-03-17T16:55:25.184Z" },
     { url = "https://files.pythonhosted.org/packages/9c/fd/b247aec6add5601956d440488b7f23151d8343747e82c038af37b28d6098/multidict-6.2.0-py3-none-any.whl", hash = "sha256:5d26547423e5e71dcc562c4acdc134b900640a39abd9066d7326a7cc2324c530", size = 10266, upload-time = "2025-03-17T16:55:52.771Z" },
+=======
+name = "js-python-starter"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "python-dotenv" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "python-dotenv", specifier = "==1.2.1" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.3.5" },
+    { name = "pytest-cov", specifier = ">=6.0.0" },
+    { name = "ruff", specifier = ">=0.13.2" },
+>>>>>>> external/main
 ]
 
 [[package]]
@@ -336,6 +361,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/be/45/9b538de8cef30e17c7b45ef42f538a94889ed6a16f2387a6c89e73220651/pytest-cov-6.0.0.tar.gz", hash = "sha256:fde0b595ca248bb8e2d76f020b465f3b107c9632e6a1d1705f17834c89dcadc0", size = 66945, upload-time = "2024-10-29T20:13:35.363Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/36/3b/48e79f2cd6a61dbbd4807b4ed46cb564b4fd50a76166b1c4ea5c1d9e2371/pytest_cov-6.0.0-py3-none-any.whl", hash = "sha256:eee6f1b9e61008bd34975a4d5bab25801eb31898b032dd55addc93e96fcaaa35", size = 22949, upload-time = "2024-10-29T20:13:33.215Z" },
+]
+
+[[package]]
+name = "python-dotenv"
+version = "1.2.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f0/26/19cadc79a718c5edbec86fd4919a6b6d3f681039a2f6d66d14be94e75fb9/python_dotenv-1.2.1.tar.gz", hash = "sha256:42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6", size = 44221, upload-time = "2025-10-26T15:12:10.434Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/14/1b/a298b06749107c305e1fe0f814c6c74aea7b2f1e10989cb30f544a1b3253/python_dotenv-1.2.1-py3-none-any.whl", hash = "sha256:b81ee9561e9ca4004139c6cbba3a238c32b03e4894671e181b671e8cb8425d61", size = 21230, upload-time = "2025-10-26T15:12:09.109Z" },
 ]
 
 [[package]]
