@@ -32,7 +32,7 @@ class TestH5179(IsolatedAsyncioTestCase):
     async def test_update(self):
         mock_response = self.test_data["update_response"]
 
-        with patch("devices.thermometer.h5179.log.warning") as mock_logging:
+        with patch("devices.thermometer.h5179.logger.warning") as mock_logging:
             self.mock_aioresponse.post(
                 "https://openapi.api.govee.com/router/api/v1/device/state",
                 status=200,
