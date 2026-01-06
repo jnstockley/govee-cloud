@@ -1,11 +1,9 @@
-import logging
+from util.logging import logger
 import uuid
 
 import aiohttp
 
 from util import on_request_start, on_request_end
-
-logger = logging.getLogger("govee-cloud")
 
 capabilities = {
     "devices.capabilities.on_off": ["powerSwitch"],
