@@ -1,9 +1,7 @@
-import logging
+from util.logging import logger
 
 from devices.types.basic_fan import BasicFan
 from util.govee_api import GoveeAPI
-
-logger = logging.getLogger("govee-cloud")
 
 
 class Fan(BasicFan):

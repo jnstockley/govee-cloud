@@ -1,11 +1,9 @@
 """Smart Tower Fan"""
 
-import logging
+from util.logging import logger
 from devices.device_type import DeviceType
 from devices.types.fan import Fan
 from util.govee_api import GoveeAPI
-
-logger = logging.getLogger("govee-cloud")
 
 
 class H7102(Fan):

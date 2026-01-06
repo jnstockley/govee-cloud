@@ -1,6 +1,4 @@
-import logging
-
-logger = logging.getLogger("govee-cloud")
+from util.logging import logger
 
 
 class Thermometer:
