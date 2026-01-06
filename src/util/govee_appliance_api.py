@@ -1,10 +1,8 @@
-import logging
+from util.logging import logger
 
 import aiohttp
 
 from util import on_request_start, on_request_end
-
-logger = logging.getLogger("govee-cloud")
 
 
 cmds = ["mode", "turn", "gear"]

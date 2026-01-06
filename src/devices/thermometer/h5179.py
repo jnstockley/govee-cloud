@@ -1,12 +1,10 @@
 """Wi-Fi Thermometer"""
 
-import logging
+from util.logging import logger
 
 from devices.device_type import DeviceType
 from devices.types.thermometer import Thermometer
 from util.govee_api import GoveeAPI
-
-log = logging.getLogger("govee-cloud")
 
 
 class H5179(Thermometer):
@@ -30,4 +28,4 @@ class H5179(Thermometer):
             super().update(capabilities)
         except Exception as e:
             self.online = False
-            log.error(f"Error updating device state: {e}")
+            logger.error(f"Error updating device state: {e}")

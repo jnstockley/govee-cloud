@@ -1,9 +1,8 @@
-import logging
 from types import SimpleNamespace
 
 from aiohttp import ClientSession, TraceRequestStartParams, TraceRequestEndParams
 
-logger = logging.getLogger("govee-cloud")
+from util.logging import logger
 
 
 async def on_request_start(

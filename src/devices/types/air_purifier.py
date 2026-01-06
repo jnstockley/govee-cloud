@@ -1,8 +1,6 @@
-import logging
+from util.logging import logger
 
 from devices.types.basic_fan import BasicFan
-
-logger = logging.getLogger("govee-cloud")
 
 
 class AirPurifier(BasicFan):
