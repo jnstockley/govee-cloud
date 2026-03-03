@@ -285,11 +285,15 @@ dev = [
 ]
 
 [package.metadata]
+<<<<<<< HEAD
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.11.14" },
     { name = "asyncio", specifier = ">=3.4.3" },
     { name = "python-dotenv", specifier = "==1.2.2" },
 ]
+=======
+requires-dist = [{ name = "python-dotenv", specifier = "==1.2.2" }]
+>>>>>>> external/main
 
 [package.metadata.requires-dev]
 dev = [
