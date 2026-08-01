@@ -1,10 +1,10 @@
 from unittest import IsolatedAsyncioTestCase
-from unittest.mock import patch, ANY
+from unittest.mock import ANY, patch
 
 import aiohttp
 from yarl import URL
 
-from util import on_request_start, on_request_end
+from util import on_request_end, on_request_start
 
 
 class TestUtil(IsolatedAsyncioTestCase):

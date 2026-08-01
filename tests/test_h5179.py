@@ -22,7 +22,7 @@ class TestH5179(IsolatedAsyncioTestCase):
 
         # Load test data from JSON file
         test_data_path = Path(__file__).parent / "test_data" / "h5179.json"
-        with open(test_data_path, "r") as f:
+        with open(test_data_path, "r") as f:  # noqa: ASYNC230
             self.test_data = json.load(f)
 
     async def asyncTearDown(self):

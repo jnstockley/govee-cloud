@@ -1,6 +1,5 @@
-from util.logging import logger
-
 from devices.types.basic_fan import BasicFan
+from util.logging import logger
 
 
 class AirPurifier(BasicFan):

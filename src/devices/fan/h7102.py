@@ -1,9 +1,9 @@
 """Smart Tower Fan"""
 
-from util.logging import logger
 from devices.device_type import DeviceType
 from devices.types.fan import Fan
 from util.govee_api import GoveeAPI
+from util.logging import logger
 
 
 class H7102(Fan):
@@ -32,6 +32,6 @@ class H7102(Fan):
             state = await api.get_device_state(self.sku, self.device_id)
             capabilities: dict = state["capabilities"]
             super().update(capabilities)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.online = False
             logger.error(f"Error updating device state: {e}")
