@@ -1,9 +1,7 @@
-from util.logging import logger
-
 import aiohttp
 
-from util import on_request_start, on_request_end
-
+from util import on_request_end, on_request_start
+from util.logging import logger
 
 cmds = ["mode", "turn", "gear"]
 

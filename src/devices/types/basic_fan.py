@@ -1,6 +1,5 @@
-from util.logging import logger
-
 from util.govee_api import GoveeAPI
+from util.logging import logger
 
 
 class BasicFan:
@@ -48,7 +47,7 @@ class BasicFan:
         try:
             response = await api.control_device(self.sku, self.device_id, capability)
             self.parse_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.online = False
             logger.error(f"Error turning on device: {e}")
 
@@ -65,7 +64,7 @@ class BasicFan:
         try:
             response = await api.control_device(self.sku, self.device_id, capability)
             self.parse_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.online = False
             logger.error(f"Error turning off device: {e}")
 
@@ -96,6 +95,6 @@ class BasicFan:
         try:
             response = await api.control_device(self.sku, self.device_id, capability)
             self.parse_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.online = False
             logger.error(f"Error setting work mode: {e}")

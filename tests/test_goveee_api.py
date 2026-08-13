@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
+
 from aioresponses import aioresponses
 
 from src.util.govee_api import GoveeAPI
@@ -15,7 +16,7 @@ class TestGoveeAPI(IsolatedAsyncioTestCase):
 
         # Load test data from JSON file
         test_data_path = Path(__file__).parent / "test_data" / "govee_api.json"
-        with open(test_data_path, "r") as f:
+        with open(test_data_path, "r") as f:  # noqa: ASYNC230
             self.test_data = json.load(f)
 
     async def asyncTearDown(self):

@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from aiohttp import ClientSession, TraceRequestStartParams, TraceRequestEndParams
+from aiohttp import ClientSession, TraceRequestEndParams, TraceRequestStartParams
 
 from util.logging import logger
 

@@ -1,7 +1,6 @@
-from util.logging import logger
-
 from devices.types.basic_fan import BasicFan
 from util.govee_api import GoveeAPI
+from util.logging import logger
 
 
 class Fan(BasicFan):
@@ -60,7 +59,7 @@ class Fan(BasicFan):
         try:
             response = await api.control_device(self.sku, self.device_id, capability)
             self.parse_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.online = False
             logger.error(f"Error toggling oscillation: {e}")
 
@@ -83,6 +82,6 @@ class Fan(BasicFan):
         try:
             response = await api.control_device(self.sku, self.device_id, capability)
             self.parse_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.online = False
             logger.error(f"Error setting fan speed: {e}")
