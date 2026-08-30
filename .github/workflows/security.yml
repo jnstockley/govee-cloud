@@ -141,7 +141,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           version: latest
-          scan-type: fs
+          scan-type: rootfs
           scan-ref: .trivy-package
           format: sarif
           output: trivy-results.sarif
