@@ -154,7 +154,7 @@ jobs:
         if: steps.dockerfile.outputs.exists == 'false'
         run: docker run --rm -v "$PWD/.trivy-package:/scan" aquasec/trivy fs --list-all-pkgs --format json /scan > trivy-packages.json
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: steps.dockerfile.outputs.exists == 'false'
         with:
           name: trivy-package-inventory
