@@ -13,9 +13,13 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
+<<<<<<< HEAD
     "aiohttp>=3.11.14, <3.12",
     "asyncio>=3.4.3",
     "python-dotenv==1.2.3",
+=======
+    "python-dotenv==1.2.4",
+>>>>>>> external/main
 ]
 [project.urls]
 Homepage = "https://github.com/jnstockley/python-starter"
