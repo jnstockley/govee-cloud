@@ -3,7 +3,7 @@ name = "govee-cloud"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13, <4.0"
+requires-python = ">=3.11, <3.16"
 license-files = ["LICENSE"]
 authors = [
     { name = "Jack Stockley", email = "jack@jstockley.com"}
@@ -13,9 +13,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "aiohttp>=3.11.14, <3.12",
-    "asyncio>=3.4.3",
-    "python-dotenv==1.2.4",
+    "aiohttp>=3.0.0, <3.15",
+    "asyncio>=4.0.0, <5.0.0",
+    "python-dotenv>=1.2.4, <2.0.0",
 ]
 [project.urls]
 Homepage = "https://github.com/jnstockley/python-starter"
