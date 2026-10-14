@@ -469,7 +469,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiohttp", specifier = ">=3.0.0,<3.15" },
+    { name = "aiohttp", specifier = ">=3.0.0,<4.0.0" },
     { name = "asyncio", specifier = ">=4.0.0,<5.0.0" },
     { name = "python-dotenv", specifier = ">=1.2.4,<2.0.0" },
 ]
